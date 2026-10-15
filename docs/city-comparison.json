@@ -1,0 +1,2910 @@
+{
+  "scannedAt": "2026-10-15T04:56:59.282Z",
+  "tools": 35,
+  "cities": [
+    {
+      "city": "西安",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳西安大话南门餐厅",
+          "storeCode": "1960642",
+          "menuSize": 69,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳西安小寨金莎餐厅",
+          "storeCode": "1960628",
+          "menuSize": 70,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳西安楷模广场餐厅",
+          "storeCode": "1960658",
+          "menuSize": 73,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 67,
+        "diff": 14,
+        "examples": [
+          {
+            "code": "501205",
+            "name": "薯条",
+            "min": 1500,
+            "max": 1550
+          },
+          {
+            "code": "521575",
+            "name": "锦州蜜烤风味肉骨鸡架",
+            "min": 1650,
+            "max": 1700
+          },
+          {
+            "code": "521952",
+            "name": "龙焰鸡腿堡",
+            "min": 2650,
+            "max": 2700
+          },
+          {
+            "code": "521953",
+            "name": "龙焰芝士棒鸡腿堡",
+            "min": 2950,
+            "max": 3000
+          },
+          {
+            "code": "521986",
+            "name": "马苏里拉拉丝芝士条",
+            "min": 1650,
+            "max": 1700
+          }
+        ]
+      }
+    },
+    {
+      "city": "深圳",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳深圳岗厦北餐厅",
+          "storeCode": "1420924",
+          "menuSize": 57,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳深圳福华一路(卓悦中心)餐厅",
+          "storeCode": "1420525",
+          "menuSize": 54,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳深圳岗厦连城新天地餐厅",
+          "storeCode": "1420770",
+          "menuSize": 66,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 40,
+        "diff": 0,
+        "examples": []
+      }
+    },
+    {
+      "city": "上海",
+      "hasAddress": true,
+      "storeCount": 1,
+      "stores": [
+        {
+          "storeName": "麦当劳上海陆家嘴星展餐厅",
+          "storeCode": "1450512",
+          "menuSize": 65,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": null
+    },
+    {
+      "city": "杭州",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳杭州文三餐厅",
+          "storeCode": "3330033",
+          "menuSize": 70,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳杭州沈塘桥地铁A出口餐厅",
+          "storeCode": "3330445",
+          "menuSize": 65,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳杭州拱墅区集合大厦餐厅",
+          "storeCode": "3330629",
+          "menuSize": 58,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 52,
+        "diff": 0,
+        "examples": []
+      }
+    },
+    {
+      "city": "北京",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳北京景辉街餐厅",
+          "storeCode": "1950754",
+          "menuSize": 60,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳北京景华南街餐厅",
+          "storeCode": "1950553",
+          "menuSize": 63,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳北京光华路世纪财富中心餐厅",
+          "storeCode": "1950925",
+          "menuSize": 60,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 44,
+        "diff": 0,
+        "examples": []
+      }
+    },
+    {
+      "city": "成都",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳成都锦江区联升巷(京都大厦)餐厅",
+          "storeCode": "3450410",
+          "menuSize": 63,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳成都锦江总府路茂业百货餐厅",
+          "storeCode": "3450339",
+          "menuSize": 62,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳成都锦江区东大街旗舰店餐厅",
+          "storeCode": "3450204",
+          "menuSize": 60,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 47,
+        "diff": 0,
+        "examples": []
+      }
+    },
+    {
+      "city": "重庆",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳重庆金鹰财富中心餐厅",
+          "storeCode": "3450149",
+          "menuSize": 64,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳重庆1089艺术美丽中心餐厅",
+          "storeCode": "3450146",
+          "menuSize": 64,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳重庆解放碑赛博城市餐厅",
+          "storeCode": "3450379",
+          "menuSize": 59,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 54,
+        "diff": 46,
+        "examples": [
+          {
+            "code": "501205",
+            "name": "薯条",
+            "min": 1550,
+            "max": 1650
+          },
+          {
+            "code": "520688",
+            "name": "大杯鲜萃咖啡",
+            "min": 1300,
+            "max": 1550
+          },
+          {
+            "code": "521147",
+            "name": "Hold不住鸡排堡（椒盐风味）",
+            "min": 2750,
+            "max": 2900
+          },
+          {
+            "code": "521156",
+            "name": "那么大鸡排（椒盐风味）",
+            "min": 1600,
+            "max": 1650
+          },
+          {
+            "code": "521327",
+            "name": "鲜萃冰咖",
+            "min": 1300,
+            "max": 1550
+          }
+        ]
+      }
+    },
+    {
+      "city": "武汉",
+      "hasAddress": true,
+      "storeCount": 3,
+      "stores": [
+        {
+          "storeName": "麦当劳武汉世贸广场餐厅",
+          "storeCode": "1960065",
+          "menuSize": 74,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳武汉汉口中心嘉园餐厅",
+          "storeCode": "1960277",
+          "menuSize": 69,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        },
+        {
+          "storeName": "麦当劳武汉展览馆餐厅",
+          "storeCode": "1960021",
+          "menuSize": 74,
+          "assistance": [
+            {
+              "code": "GMS001",
+              "name": "保鲜速达",
+              "enable": true
+            },
+            {
+              "code": "GMS002",
+              "name": "专人分餐",
+              "enable": false
+            },
+            {
+              "code": "GMS003",
+              "name": "专人摆台",
+              "enable": false
+            }
+          ],
+          "ladders": [
+            {
+              "gmServiceCode": "GMS001",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 22,
+                  "kind": "discount",
+                  "promotionId": "331868002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 26,
+                  "kind": "discount",
+                  "promotionId": "331878001",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 30,
+                  "kind": "discount",
+                  "promotionId": "331878002",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 34,
+                  "kind": "discount",
+                  "promotionId": "331878003",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS002",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 12,
+                  "kind": "discount",
+                  "promotionId": "331878004",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 16,
+                  "kind": "discount",
+                  "promotionId": "331878005",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 20,
+                  "kind": "discount",
+                  "promotionId": "331878006",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 24,
+                  "kind": "discount",
+                  "promotionId": "331878007",
+                  "ruleCategory": 30
+                }
+              ]
+            },
+            {
+              "gmServiceCode": "GMS003",
+              "tiers": [
+                {
+                  "thresholdCents": 30000,
+                  "percentOff": 7,
+                  "kind": "discount",
+                  "promotionId": "331878008",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 50000,
+                  "percentOff": 11,
+                  "kind": "discount",
+                  "promotionId": "331878009",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 100000,
+                  "percentOff": 15,
+                  "kind": "discount",
+                  "promotionId": "331878010",
+                  "ruleCategory": 30
+                },
+                {
+                  "thresholdCents": 200000,
+                  "percentOff": 19,
+                  "kind": "discount",
+                  "promotionId": "331878011",
+                  "ruleCategory": 30
+                }
+              ]
+            }
+          ],
+          "discountOnly": true,
+          "degraded": []
+        }
+      ],
+      "priceDiff": {
+        "common": 62,
+        "diff": 0,
+        "examples": []
+      }
+    }
+  ]
+}
