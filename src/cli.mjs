@@ -125,6 +125,9 @@ async function readStoresOnly(client, { addressQuery, cache, reservationDate }) 
       assistance: p.assistance,
       ladders: summarizeLadders(p.promotions),
       discountOnly: false,
+      // 单店单接口失败会被降级为空集合（如门店打烊时 query-meals 返回 code=600057）。
+      // 必须把原因带到输出里，否则「菜单 0 项」会被误读成「这家店没有团餐」。
+      degraded: p.degraded,
     });
   }
   return { address, stores, storeReports: reports, plans: [], best: null, verdict: null, warnings: [] };
@@ -187,16 +190,18 @@ async function main() {
     return 0;
   }
 
-  if (!people || !budgetPerPersonCents) {
-    process.stderr.write('❌ 需要 --people 与 --budget。示例：mcd-groupmeal optimize --people 20 --budget 35 --address 西安\n');
-    return 2;
-  }
-
   const { client, from } = buildClient(args);
+
+  // stores 只做门店情报，不需要人数与预算（README/USAGE 里就是这么写的）。
   if (command === 'stores') {
     const result = await readStoresOnly(client, { addressQuery: args.address, cache, reservationDate: args.reservation });
     process.stdout.write(renderStores(result) + '\n');
     return 0;
+  }
+
+  if (!people || !budgetPerPersonCents) {
+    process.stderr.write('❌ 需要 --people 与 --budget。示例：mcd-groupmeal optimize --people 20 --budget 35 --address 西安\n');
+    return 2;
   }
 
   const result = await optimize({

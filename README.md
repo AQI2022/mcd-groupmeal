@@ -16,6 +16,8 @@
 
 **它不是点餐助手，是算钱工具。** 输出可量化、可复现、可证伪。
 
+> 📖 **不知道怎么开始？看 [`docs/USER-GUIDE.md`](./docs/USER-GUIDE.md)** —— 四种用法（零安装 / Windows 双击 / 命令行 / 当库引入）、完整参数表、输出逐列解读、前置条件与故障排查。
+
 ```bash
 node src/cli.mjs optimize --people 20 --budget 35 --address 西安
 ```
@@ -61,6 +63,12 @@ node src/cli.mjs optimize --people 20 --budget 35 --address 西安
 ---
 
 ## 快速开始
+
+### 最省事的两条路
+
+- **Windows 不想碰命令行**：双击 `bin\mcd-meal.cmd` —— 依次问你「人数 / 人均预算 / 地址」，出比价结果；失败时直接告诉你下一步该点哪里。
+- **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）。
+- **本机自检**：双击 `bin\mcd-doctor.cmd`（Token / 握手 / 工具清单 / 地址簿，一次看清）。
 
 ### 0. 零配置试用（不需要 Token，不发任何网络请求）
 
@@ -197,6 +205,11 @@ node test/core.test.mjs         # 24 个单元测试
 ## 项目结构
 
 ```
+bin/
+  mcd-meal.cmd       双击即用：问人数/预算/地址 → 出比价结果
+  mcd-doctor.cmd     自检：Token / 握手 / 工具清单 / 地址簿
+  mcd-demo.cmd       演示模式（无需 Token）
+  meal.mjs           上面三个 .cmd 调用的友好入口（中文提示 + 失败指引）
 src/
   cli.mjs          CLI 入口（optimize / stores / demo / doctor）
   mcp-client.mjs   零依赖 Streamable HTTP JSON-RPC 客户端（会话、SSE、限流、退避）
@@ -214,7 +227,7 @@ tools/
   lifeline-probe.mjs  A~E 生死线验证器
   city-scan.mjs       多城市门店与店间价差扫描器
 test/core.test.mjs    24 个零依赖单元测试
-docs/                 实测报告（原样输出、生死线、8 城对比）
+docs/                 使用指南 + 实测报告（原样输出、生死线、8 城对比）
 ```
 
 ---

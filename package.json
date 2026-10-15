@@ -14,6 +14,7 @@
     "./mcp": "./src/mcp-client.mjs"
   },
   "files": [
+    "bin",
     "src",
     "tools",
     "docs",

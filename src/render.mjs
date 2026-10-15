@@ -140,6 +140,9 @@ export function renderStores(result) {
   for (const r of result.storeReports) {
     lines.push(`🏪 ${r.store.storeName}  (storeCode=${r.store.storeCode} beCode=${r.store.beCode} 预约=${r.store.reservation ? '支持' : '不支持'})`);
     lines.push(`   菜单 ${r.menuSize} 项 · 助餐档位 ${r.assistance.length} 个 · 促销规则档 ${r.ladders.reduce((s, l) => s + l.tiers.length, 0)} 档 · 仅满折=${r.discountOnly}`);
+    for (const d of r.degraded ?? []) {
+      lines.push(`   ⚠️ 降级：${d.label} 失败（${d.error}）——该项数据为空，不代表该店真的没有`);
+    }
     for (const a of r.assistance) {
       lines.push(`   · ${a.gmServiceCode} ${a.gmServiceName}${a.enable ? '' : '（不可用：' + a.unusableReason + '）'}`);
     }
