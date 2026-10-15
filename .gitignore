@@ -1,0 +1,19 @@
+# 依赖与构建产物
+node_modules/
+dist/
+coverage/
+
+# ⚠️ 绝不提交任何真实凭证（官方《参赛声明》硬性要求）
+mcp-config.json
+.env
+.env.*
+*.local.json
+lifeline.json
+_raw-*.txt
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
