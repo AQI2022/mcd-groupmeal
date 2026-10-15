@@ -1,0 +1,12 @@
+{
+  "_comment": "复制本文件为 mcp-config.json 并填入真实 Token。mcp-config.json 已被 .gitignore 忽略，切勿提交真实凭证（官方《参赛声明》硬性要求）。",
+  "mcpServers": {
+    "mcd-mcp": {
+      "type": "streamablehttp",
+      "url": "https://mcp.mcd.cn",
+      "headers": {
+        "Authorization": "Bearer YOUR_MCP_TOKEN"
+      }
+    }
+  }
+}
