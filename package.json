@@ -1,0 +1,50 @@
+{
+  "name": "mcd-groupmeal",
+  "version": "1.0.0",
+  "description": "麦当劳企业团餐满减优化引擎 · 给「人数 + 人均预算 + 配送地址」，跨所有可配送团餐门店算出最省的那一单（麦当劳中国 MCP）",
+  "type": "module",
+  "bin": {
+    "mcd-groupmeal": "src/cli.mjs"
+  },
+  "main": "src/optimizer.mjs",
+  "exports": {
+    ".": "./src/optimizer.mjs",
+    "./promotions": "./src/promotions.mjs",
+    "./split": "./src/split.mjs",
+    "./mcp": "./src/mcp-client.mjs"
+  },
+  "files": [
+    "src",
+    "tools",
+    "docs",
+    "README.md",
+    "MCP_INTEGRATION.md",
+    "CONTEST_DECLARATION.md",
+    "mcp-config.example.json",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "demo": "node src/cli.mjs demo",
+    "doctor": "node src/cli.mjs doctor",
+    "test": "node --test test/",
+    "lifeline": "node tools/lifeline-probe.mjs",
+    "city-scan": "node tools/city-scan.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "mcdonalds",
+    "mcd",
+    "mcp",
+    "model-context-protocol",
+    "group-meal",
+    "团餐",
+    "满减",
+    "optimizer",
+    "zero-dependency"
+  ],
+  "license": "MIT"
+}
