@@ -22,9 +22,11 @@ import { tierFor, classify, BUDGET_TIERS } from '../src/tiers.mjs';
 import { yuanToCents, formatCents, formatDiscountRate } from '../src/money.mjs';
 import { extractJson, matchBrace } from '../src/json.mjs';
 import { buildBaskets, buildPools } from '../src/basket.mjs';
-import { demoMenu, demoCalculatePrice, DEMO_STORES, DEMO_COUPON_ONLY_CODE, demoCoupons, MockClient } from '../src/mock.mjs';
+import { demoMenu, demoCalculatePrice, DEMO_STORES, DEMO_PICKUP_STORES, DEMO_COUPON_ONLY_CODE, demoCoupons, MockClient } from '../src/mock.mjs';
 import { buildCatalog, matchKeywords, couponPlans, priceCovers, solvePhoneOrder, renderPhoneCard, placeOrder, CHANNEL } from '../src/phone.mjs';
 import { availableCoupons, campaignCalendar } from '../src/mcd.mjs';
+import { optimize } from '../src/optimizer.mjs';
+import { renderReport } from '../src/render.mjs';
 
 // ---------------------------------------------------------------- 金额
 test('money: 元→分 与展示', () => {
@@ -358,8 +360,28 @@ test('phone: 到店自取端到端（打烊门店被排除，最优方案用上�
   assert.match(card, /实付 ¥26\.30/);
 });
 
-test('phone: 麦乐送端到端（含配送+打包，且券后省得出来）', async () => {
-  const client = new MockClient();
+test('phone: maxStores 是「比价几家」而不是「扫描几家」——打烊门店不占名额', async () => {  // 真实场景：2026-10-15 23:57 西安，按距离最近的 3 家全部打烊，第 4 家才营业。
+  // 若让打烊门店占用 maxStores 名额，用户会得到「一家都比不出来」的错误结论。
+  class ClosedFirstMock extends MockClient {
+    async callTool(name, args) {
+      if (name === 'query-nearby-stores') {
+        const rows = [...DEMO_PICKUP_STORES].sort((a, b) => (a.businessStatus === b.businessStatus ? 0 : a.businessStatus ? 1 : -1));
+        return { ok: true, json: { success: true, code: 200, data: rows }, text: '', code: 200, message: '', tool: name, isError: false };
+      }
+      return super.callTool(name, args);
+    }
+  }
+  const result = await solvePhoneOrder({
+    client: new ClosedFirstMock(), channel: CHANNEL.PICKUP, city: '演示市', keyword: '演示路',
+    want: ['巨无霸'], couponFirst: false, maxStores: 2, maxCalls: 40,
+  });
+  assert.equal(result.closed.length, 1, '打烊门店要如实列出来');
+  assert.equal(result.closed[0].storeCode, '9000004');
+  assert.equal(result.comparisons.length, 2, `打烊门店不能占用比价名额，实际比价 ${result.comparisons.length} 家`);
+  assert.ok(result.stores.length >= 3, '扫描过的门店（含打烊的）都要出现在备选列表里');
+});
+
+test('phone: 麦乐送端到端（含配送+打包，且券后省得出来）', async () => {  const client = new MockClient();
   const result = await solvePhoneOrder({ client, channel: CHANNEL.DELIVERY, addressQuery: '演示', want: ['巨无霸', '中薯条'], couponFirst: false });
   assert.equal(result.channel, CHANNEL.DELIVERY);
   const b = result.best;
@@ -403,4 +425,52 @@ test('phone: 文字型工具（麦麦省券/活动日历）不会被误判为失
   const bad = await client.callTool('query-meals', { storeCode: '9000004', beType: 1 });
   assert.equal(bad.ok, false);
   assert.equal(bad.code, 600057);
+});
+
+// ---------------------------------------------------------------- 团餐「没有方案」的契约
+
+/** 团餐门店查询返回空：模拟「该地址附近没有可配送团餐门店」。 */
+class NoStoreMock extends MockClient {
+  async callTool(name, args) {
+    if (name === 'delivery-query-stores') {
+      return { ok: true, json: { success: true, code: 200, data: [] }, text: '', code: 200, message: '', tool: name, isError: false };
+    }
+    return super.callTool(name, args);
+  }
+}
+
+test('团餐: 没有可用方案时返回完整形状（回归：早先会抛 headline 的 TypeError）', async () => {
+  const result = await optimize({
+    client: new NoStoreMock(),
+    people: 20,
+    budgetPerPersonCents: 3500,
+    addresses: [{ addressId: 'DEMO', fullAddress: '演示市演示路 1 号' }],
+  });
+
+  assert.equal(result.best, null);
+  assert.deepEqual(result.plans, []);
+  // 这几个字段曾经只在「有方案」时才有，导致报告渲染直接崩掉
+  assert.deepEqual(result.splitPlans, [], 'splitPlans 必须存在');
+  assert.equal(result.verdict, null, 'verdict 必须存在（可为 null）');
+  assert.deepEqual(result.savings, { vsSameStoreWorstCents: 0, vsNextStoreCents: 0 }, 'savings 必须存在');
+  assert.equal(result.callsUsed, 0);
+  assert.ok(result.warnings.some((w) => /团餐门店|可用方案/.test(w)), '要给出人能看懂的原因');
+
+  // 关键断言：报告必须渲染成一句人话，而不是抛异常
+  const text = renderReport(result, { people: 20, budgetPerPersonCents: 3500 });
+  assert.match(text, /没有可配送的团餐门店|没有算出任何可用方案/);
+  assert.match(text, /拆单结论：本次没有可比价方案/);
+  assert.ok(!text.includes('undefined'), '报告里不能出现 undefined');
+  assert.ok(!text.includes('NaN'), '报告里不能出现 NaN');
+});
+
+test('团餐: 报告渲染对残缺结果也要有防御（这是用户最后看到的东西）', () => {
+  const text = renderReport(
+    { address: null, stores: [], plans: [], best: null, warnings: ['演示告警'] },
+    { people: 10, budgetPerPersonCents: 3000 },
+  );
+  assert.match(text, /（未知地址）/);
+  assert.match(text, /没有算出任何可用方案/);
+  assert.match(text, /演示告警/);
+  assert.match(text, /本次共调用官方 calculate-price 0 次/);
 });

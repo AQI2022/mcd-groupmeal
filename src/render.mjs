@@ -76,25 +76,32 @@ export function renderSplitTable(singlePlan, splitPlans) {
 /** 完整的人类可读报告（终端用）。 */
 export function renderReport(result, { people, budgetPerPersonCents } = {}) {
   const out = [];
-  const { best, address, storeReports, verdict } = result;
-  out.push(`📍 地址：${address.fullAddress}`);
+  const { best, address, verdict } = result;
+  // 这一层刻意做防御式读取：报告是用户最后看到的东西，
+  // 「没有方案」必须是**一句人话**，而不是一个 TypeError。
+  const storeReports = result.storeReports ?? [];
+  const plans = result.plans ?? [];
+  const splitPlans = result.splitPlans ?? [];
+  const savings = result.savings ?? { vsSameStoreWorstCents: 0, vsNextStoreCents: 0 };
+
+  out.push(`📍 地址：${address?.fullAddress ?? '（未知地址）'}`);
   out.push(`👥 ${people} 人 · 人均预算 ${formatCents(budgetPerPersonCents)} · 总预算 ${formatCents(budgetPerPersonCents * people)}`);
-  out.push(`🏪 可配送团餐门店：${result.stores.length} 家`);
+  out.push(`🏪 可配送团餐门店：${(result.stores ?? []).length} 家`);
   out.push('');
 
   const enabled = storeReports.map((r) => `${r.store.storeName.split('麦当劳')[1] ?? r.store.storeName}(菜单 ${r.menuSize} 项 / 助餐 ${r.assistance.length} 档 / 规则 ${r.ladders.reduce((s, l) => s + l.tiers.length, 0)} 档)`);
-  out.push(`   门店情报：${enabled.join('；')}`);
+  out.push(`   门店情报：${enabled.join('；') || '（无）'}`);
   out.push('');
 
   out.push('╭─ 跨门店比价矩阵（全部数字来自官方 calculate-price）');
-  out.push(renderComparison(result.plans));
+  out.push(renderComparison(plans));
   out.push('');
 
   if (best) {
     out.push(`🏆 最优方案：${best.store.storeName}（${best.assistance?.gmServiceName ?? '默认助餐'}）`);
     out.push(`   实付 ${formatCents(best.totals.price)} · 人均 ${formatCents(best.totals.perHeadCents)} · 总优惠 ${formatCents(best.totals.discount)}（${best.totals.productOriginalPrice ? ((best.totals.discount / best.totals.productOriginalPrice) * 100).toFixed(1) : '0'}%）`);
-    if (result.savings.vsSameStoreWorstCents > 0) out.push(`   同店最差助餐档位要多付 ${formatCents(result.savings.vsSameStoreWorstCents)}`);
-    if (result.savings.vsNextStoreCents > 0) out.push(`   比次优门店省 ${formatCents(result.savings.vsNextStoreCents)}`);
+    if (savings.vsSameStoreWorstCents > 0) out.push(`   同店最差助餐档位要多付 ${formatCents(savings.vsSameStoreWorstCents)}`);
+    if (savings.vsNextStoreCents > 0) out.push(`   比次优门店省 ${formatCents(savings.vsNextStoreCents)}`);
     out.push('');
 
     const storeReport = storeReports.find((r) => r.store.storeCode === best.store.storeCode);
@@ -105,14 +112,24 @@ export function renderReport(result, { people, budgetPerPersonCents } = {}) {
         out.push(`     · ${l.gmServiceCode}：${tiers}`);
       }
       out.push('');
-      out.push(`   本单商品构成：${best.orders[0].items.map((i) => `${i.name}×${i.quantity}`).join(' + ')}`);
+      const firstItems = best.orders?.[0]?.items ?? [];
+      out.push(`   本单商品构成：${firstItems.map((i) => `${i.name}×${i.quantity}`).join(' + ') || '（无）'}`);
       out.push('');
     }
+  } else {
+    out.push('🏆 最优方案：**本次没有算出任何可用方案**');
+    out.push('   常见原因：门店当前不在营业时间（官方 query-meals 返回 600057）、该时段没有可用助餐档位、');
+    out.push('   或该地址下没有可配送的团餐门店。换一个地址或换个时段再试即可。');
+    out.push('');
   }
 
-  out.push(`🔀 拆单结论：**${verdict.headline}**。${verdict.reason}`);
-  if (result.splitPlans.length) {
-    out.push(renderSplitTable(best, result.splitPlans));
+  if (verdict) {
+    out.push(`🔀 拆单结论：**${verdict.headline}**。${verdict.reason}`);
+    if (splitPlans.length && best) {
+      out.push(renderSplitTable(best, splitPlans));
+    }
+  } else {
+    out.push('🔀 拆单结论：本次没有可比价方案，无法给出拆单建议。');
   }
   out.push('');
 
@@ -122,13 +139,14 @@ export function renderReport(result, { people, budgetPerPersonCents } = {}) {
     out.push('   ——这只是「距下一档还差多少」的客观信息，**不代表建议加购**。');
   }
 
-  if (result.warnings.length) {
+  const warns = result.warnings ?? [];
+  if (warns.length) {
     out.push('');
     out.push('⚠️ 告警：');
-    for (const w of result.warnings) out.push(`   · ${w}`);
+    for (const w of warns) out.push(`   · ${w}`);
   }
   out.push('');
-  out.push(`（本次共调用官方 calculate-price ${result.callsUsed} 次）`);
+  out.push(`（本次共调用官方 calculate-price ${result.callsUsed ?? 0} 次）`);
   return out.join('\n');
 }
 

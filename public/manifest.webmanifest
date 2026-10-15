@@ -1,0 +1,16 @@
+{
+  "name": "麦麦省 · 麦当劳点餐比价",
+  "short_name": "麦麦省",
+  "description": "给「想吃什么 + 在哪」算出该去哪家店、用哪张券、实付多少（麦当劳中国 MCP 官方算价）",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f4f6",
+  "theme_color": "#DA291C",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

@@ -19,6 +19,7 @@
 
 > 📖 **不知道怎么开始？看 [`docs/USER-GUIDE.md`](./docs/USER-GUIDE.md)** —— 四种用法（零安装 / Windows 双击 / 命令行 / 当库引入）、完整参数表、输出逐列解读、前置条件与故障排查。
 > 📱 **在手机上点餐怎么用最省？看 [`docs/PHONE-GUIDE.md`](./docs/PHONE-GUIDE.md)** —— 到店自取 / 麦乐送、券找货、六个实测坑（打烊 `600057`、券商品不在菜单、券分渠道…）。
+> 📲 **想装在手机里用？看 [`docs/MOBILE-INSTALL.md`](./docs/MOBILE-INSTALL.md)** —— 手机浏览器界面（添加到主屏幕）、Android Termux 完全本地安装、连不上的排查清单。
 
 ```bash
 node src/cli.mjs optimize --people 20 --budget 35 --address 西安   # 团餐
@@ -81,6 +82,23 @@ node src/cli.mjs phone --demo                       # 离线演示，不需要 T
 
 完整的手机点餐用法、六个实测坑与边界说明见 **[`docs/PHONE-GUIDE.md`](docs/PHONE-GUIDE.md)**。
 
+### 想直接装在手机上用？→ 手机端点餐界面（`src/server.mjs`）
+
+```bash
+node src/server.mjs                 # 起服务；按提示把「手机上打开」的地址发到手机
+node src/server.mjs --demo --open   # 不联网、不需要 Token，先看界面长什么样
+```
+
+手机浏览器打开那个地址 → **添加到主屏幕** → 以后点图标就能用，
+能选门店/券/清单、看实付、必要时生成付款链接——**手机上不需要装 Node，也不需要敲命令**。
+
+为什么必须有一个服务端（而不是「一个 HTML 文件扔手机里」）：实测 `mcp.mcd.cn`
+**不返回任何 CORS 头**，浏览器直连会被同源策略拦掉；而把 Token 写进前端页面等于公开账号凭证。
+所以正确架构是 `手机浏览器 → 本服务 → 麦当劳 MCP`，Token 只存在于服务端。
+
+两种装法（Android 用 Termux 可以完全脱离电脑）、连不上的排查清单、
+iOS/Android 分别怎么「添加到主屏幕」，见 **[`docs/MOBILE-INSTALL.md`](docs/MOBILE-INSTALL.md)**。
+
 ---
 
 ## 快速开始
@@ -89,7 +107,8 @@ node src/cli.mjs phone --demo                       # 离线演示，不需要 T
 
 - **Windows 不想碰命令行**：双击 `bin\mcd-meal.cmd` —— 依次问你「人数 / 人均预算 / 地址」，出比价结果；失败时直接告诉你下一步该点哪里。
 - **手机上点餐**：双击 `bin\mcd-phone.cmd` —— 依次问你「城市 / 位置 / 想吃什么 / 预算」，出「手机点餐卡」。
-- **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）；手机点餐用 `bin\mcd-phone.cmd --demo`。
+- **手机上用（推荐）**：双击 `bin\mcd-serve.cmd` —— 起一个网页服务，手机浏览器打开就能点；能「添加到主屏幕」。
+- **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）；手机点餐用 `bin\mcd-phone.cmd --demo`，手机界面用 `bin\mcd-serve.cmd --demo`。
 - **本机自检**：双击 `bin\mcd-doctor.cmd`（Token / 握手 / 工具清单 / 地址簿，一次看清）。
 
 ### 0. 零配置试用（不需要 Token，不发任何网络请求）
@@ -230,12 +249,14 @@ node test/core.test.mjs         # 33 个单元测试（含手机点餐 9 项）
 bin/
   mcd-meal.cmd       双击即用：问人数/预算/地址 → 出比价结果
   mcd-phone.cmd      双击即用（手机点餐）：问城市/位置/想吃什么/预算 → 出点餐卡
+  mcd-serve.cmd      双击即用（手机界面）：起网页服务，手机浏览器连上来用
   mcd-doctor.cmd     自检：Token / 握手 / 工具清单 / 地址簿
   mcd-demo.cmd       演示模式（无需 Token）
   meal.mjs           上面三个 .cmd 调用的友好入口（中文提示 + 失败指引）
   phone.mjs          手机点餐的友好入口（同上，手机点餐版）
 src/
   cli.mjs          CLI 入口（optimize / phone / stores / demo / doctor）
+  server.mjs       手机端服务：静态页面 + JSON API + 任务/SSE 进度 + 访问码鉴权
   mcp-client.mjs   零依赖 Streamable HTTP JSON-RPC 客户端（会话、SSE、限流、退避）
   json.mjs         MCP 返回体「markdown + 内嵌 JSON」的平衡花括号解析器
   mcd.mjs          官方工具的领域封装 + 归一化（含业务错误码处置与降级、文字型工具）
@@ -248,11 +269,22 @@ src/
   render.mjs       比价矩阵 / 结论 / 凑单提示的渲染
   mock.mjs         离线演示后端（**演示数据**，代码路径与线上一致）
   money.mjs        分/元换算与格式化
+public/              手机端界面（无构建步骤、无 CDN 依赖）
+  index.html         三个标签页：点餐 / 团餐 / 我的
+  app.js             表单、SSE 进度、下单二次确认（只负责 DOM / 事件 / 网络）
+  render.js          「结果对象 → HTML」的纯函数渲染层（可在 Node 里直接测）
+  style.css          竖屏优先样式（含安全区适配）
+  manifest.webmanifest + icon.svg + sw.js    PWA（https/localhost 下生效）
+scripts/
+  install-termux.sh  Android 手机本地安装（Termux，装完手机自己就是服务器）
 tools/
   lifeline-probe.mjs  A~E 生死线验证器
   city-scan.mjs       多城市门店与店间价差扫描器
-test/core.test.mjs    33 个零依赖单元测试
-docs/                 使用指南 + 手机点餐指南 + 实测报告（原样输出、生死线、8 城对比）
+test/core.test.mjs      36 个零依赖单元测试（规则解析 / 拆单枚举 / 手机点餐求解 / 无方案契约）
+test/frontend.test.mjs   9 个渲染层测试（把结果对象喂给界面代码，验证真的渲染出门店/券/实付）
+test/server.test.mjs    17 个手机端服务测试（访问码鉴权、路径穿越、SSE 端到端、前端一致性）
+test/fixtures/          真实链路实测快照（渲染测试样本；到店链路无个人地址）
+docs/                   使用指南 + 手机点餐指南 + 手机安装指南 + 实测报告
 ```
 
 ---

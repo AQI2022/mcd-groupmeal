@@ -31,6 +31,32 @@ class CallBudget {
   }
 }
 
+/**
+ * 「这次没有可用方案」的统一返回形状。
+ *
+ * 为什么必须统一：`--json`、CLI 报告、手机端界面都按同一套字段读结果。
+ * 早先的两个提前返回漏了 `verdict` / `splitPlans` / `savings` / `callsUsed`，
+ * 报告渲染时会直接抛 `Cannot read properties of undefined (reading 'headline')`——
+ * 用户在手机上看到的是「比价失败」，而不是「这个地址现在没有可配送的团餐门店」。
+ */
+function noPlanResult({ address, stores = [], storeReports = [], warnings = [], callsUsed = 0 }) {
+  return {
+    address,
+    stores,
+    storeReports,
+    plans: [],
+    splitPlans: [],
+    best: null,
+    bestSplit: null,
+    overallCheapestSplit: null,
+    split: null,
+    verdict: null,
+    savings: { vsSameStoreWorstCents: 0, vsNextStoreCents: 0 },
+    callsUsed,
+    warnings,
+  };
+}
+
 function totalsOf(pricedOrders) {
   const t = {
     productOriginalPrice: 0,
@@ -114,7 +140,7 @@ export async function optimize({
 
   const stores = await queryGroupMealStores(client, address.addressId);
   if (!stores.length) {
-    return { address, stores: [], storeReports: [], plans: [], best: null, split: null, warnings: ['该地址附近没有可配送的团餐门店（beType=6）。'] };
+    return noPlanResult({ address, warnings: ['该地址附近没有可配送的团餐门店（beType=6）。'] });
   }
 
   const storeReports = [];
@@ -196,7 +222,13 @@ export async function optimize({
   }
 
   if (!singlePlans.length) {
-    return { address, stores, storeReports, plans: [], best: null, split: null, warnings: warnings.concat('没有产出任何可用方案。') };
+    return noPlanResult({
+      address,
+      stores,
+      storeReports,
+      warnings: warnings.concat('没有产出任何可用方案（门店可能不在营业时间，或没有可用助餐档位）。'),
+      callsUsed: budget.used,
+    });
   }
 
   // 单笔排序：先排「未超预算」，再按人均实付升序

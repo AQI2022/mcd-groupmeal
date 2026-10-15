@@ -331,7 +331,12 @@ export async function solvePhoneOrder({
     };
   }
 
-  const candidates = storeList.slice(0, maxStores);
+  // `maxStores` 的语义是「最多比价几家门店」，**不是**「最多扫描几家门店」。
+  // 打烊门店会返回 600057、菜单为空，如果让它占用名额，夜里就会一家都比不出来
+  // （实测 2026-10-15 23:57 西安：按距离前 3 家全打烊，第 4 家雁塔路还开着）。
+  // 所以按顺序往下扫，直到拿到 maxStores 家**真的算出价格**的门店为止；扫描量上限防止极端长列表。
+  const scanLimit = Math.max(maxStores, Math.min(storeList.length, maxStores * 3));
+  const scanned = [];
   const orderType = channel === CHANNEL.DELIVERY ? ORDER_TYPE.DELIVERY : ORDER_TYPE.IN_STORE;
   const beType = channel === CHANNEL.DELIVERY ? BE_TYPE.DELIVERY : BE_TYPE.PICKUP;
 
@@ -339,7 +344,11 @@ export async function solvePhoneOrder({
   const closed = [];
   const addOns = [];
 
-  for (const store of candidates) {
+  for (const store of storeList) {
+    if (scanned.length >= scanLimit) break;
+    if (comparisons.length >= maxStores) break;
+    scanned.push(store);
+
     const mealsRes = await queryMealsWithStatus(client, { storeCode: store.storeCode, beCode: store.beCode, orderType, beType });
     const isClosed = !mealsRes.ok && mealsRes.code === CLOSED_STORE_CODE;
     if (!mealsRes.ok && !isClosed) {
@@ -510,7 +519,7 @@ export async function solvePhoneOrder({
     channel,
     address,
     query: { city, keyword, addressQuery },
-    stores: candidates.map((s) => ({ storeCode: s.storeCode, storeName: s.storeName, beCode: s.beCode, distance: s.distance ?? null, distanceText: s.distanceText ?? '' })),
+    stores: scanned.map((s) => ({ storeCode: s.storeCode, storeName: s.storeName, beCode: s.beCode, distance: s.distance ?? null, distanceText: s.distanceText ?? '' })),
     closed,
     comparisons: ranked,
     best,

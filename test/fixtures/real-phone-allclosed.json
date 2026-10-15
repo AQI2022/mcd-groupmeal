@@ -1,0 +1,101 @@
+{
+ "kind": "phone",
+ "demo": false,
+ "canOrder": false,
+ "jobId": "fixture",
+ "from": "（真实链路实测快照）",
+ "result": {
+  "channel": "pickup",
+  "address": null,
+  "query": {
+   "city": "西安市",
+   "keyword": "长安大厦"
+  },
+  "stores": [
+   {
+    "storeCode": "1960642",
+    "storeName": "麦当劳西安大话南门餐厅",
+    "beCode": "",
+    "distance": 743,
+    "distanceText": ""
+   },
+   {
+    "storeCode": "1960628",
+    "storeName": "麦当劳西安小寨金莎餐厅",
+    "beCode": "",
+    "distance": 869,
+    "distanceText": ""
+   },
+   {
+    "storeCode": "1960658",
+    "storeName": "麦当劳西安楷模广场餐厅",
+    "beCode": "",
+    "distance": 1035,
+    "distanceText": ""
+   },
+   {
+    "storeCode": "1960648",
+    "storeName": "麦当劳西安华旗国际餐厅",
+    "beCode": "",
+    "distance": 1322,
+    "distanceText": ""
+   },
+   {
+    "storeCode": "1960611",
+    "storeName": "麦当劳西安雁塔路餐厅",
+    "beCode": "",
+    "distance": 1449,
+    "distanceText": ""
+   }
+  ],
+  "closed": [
+   {
+    "storeCode": "1960642",
+    "storeName": "麦当劳西安大话南门餐厅",
+    "distance": 743,
+    "reason": "门店可能已关闭或不在营业时间"
+   },
+   {
+    "storeCode": "1960628",
+    "storeName": "麦当劳西安小寨金莎餐厅",
+    "distance": 869,
+    "reason": "门店可能已关闭或不在营业时间"
+   },
+   {
+    "storeCode": "1960658",
+    "storeName": "麦当劳西安楷模广场餐厅",
+    "distance": 1035,
+    "reason": "门店可能已关闭或不在营业时间"
+   },
+   {
+    "storeCode": "1960648",
+    "storeName": "麦当劳西安华旗国际餐厅",
+    "distance": 1322,
+    "reason": "门店可能已关闭或不在营业时间"
+   },
+   {
+    "storeCode": "1960611",
+    "storeName": "麦当劳西安雁塔路餐厅",
+    "distance": 1449,
+    "reason": "门店可能已关闭或不在营业时间"
+   }
+  ],
+  "comparisons": [],
+  "best": null,
+  "addOns": [],
+  "availableCoupons": {
+   "count": 6,
+   "titles": [
+    "中薯条买一送一",
+    "王牌小食拼",
+    "巧克力味厚松饼猪柳蛋套餐",
+    "免费脆薯饼",
+    "人气麦旋风买一送一",
+    "9.9元中杯冰美式"
+   ]
+  },
+  "warnings": [],
+  "callsUsed": 0
+ },
+ "text": "╭──────────────────────────────\n│ 🍟 手机点餐卡 · 到店自取\n│ 🔎 西安市 长安大厦\n│ 🏪 备选门店 5 家 · 已排除待营业 5 家\n╰──────────────────────────────\n\n（没有可比价的门店：门店可能都不在营业时间）"
+}

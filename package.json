@@ -17,6 +17,8 @@
   "files": [
     "bin",
     "src",
+    "public",
+    "scripts",
     "tools",
     "docs",
     "README.md",
@@ -29,12 +31,14 @@
     "node": ">=20"
   },
   "scripts": {
+    "serve": "node src/server.mjs",
+    "serve:demo": "node src/server.mjs --demo --open",
     "demo": "node src/cli.mjs demo",
     "doctor": "node src/cli.mjs doctor",
     "phone": "node src/cli.mjs phone",
     "phone:demo": "node src/cli.mjs phone --demo --want 巨无霸,美式中杯",
     "test": "node --test test/",
-    "test:direct": "node test/core.test.mjs",
+    "test:direct": "node test/core.test.mjs && node test/frontend.test.mjs && node test/server.test.mjs",
     "lifeline": "node tools/lifeline-probe.mjs",
     "city-scan": "node tools/city-scan.mjs"
   },

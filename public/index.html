@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#DA291C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="麦麦省">
+<meta name="format-detection" content="telephone=no">
+<title>麦麦省 · 点餐比价</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon.svg">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- 访问码闸门：手机上第一次打开带 ?k= 的地址后就不再出现 -->
+<div id="gate" class="gate hidden">
+  <div class="gate-box">
+    <div class="gate-logo">🍟</div>
+    <h1>需要访问码</h1>
+    <p class="muted">服务端开启了访问码保护。请使用电脑上启动服务时打印的「手机上打开」那个完整地址（结尾带 <code>?k=XXXXXX</code>）。</p>
+    <input id="gate-input" class="input" inputmode="latin" autocapitalize="characters" placeholder="6 位访问码" maxlength="6">
+    <button id="gate-btn" class="btn primary">进入</button>
+    <p id="gate-msg" class="msg"></p>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="brand"><span class="logo">🍟</span><span>麦麦省</span></div>
+  <div id="mode-pill" class="pill">连接中…</div>
+</header>
+
+<main id="main">
+
+  <!-- ───────────────────────── 点餐 -->
+  <section id="tab-phone" class="tab-panel">
+    <div class="card">
+      <div class="seg" id="channel-seg" role="tablist">
+        <button class="seg-item active" data-channel="pickup">到店自取</button>
+        <button class="seg-item" data-channel="delivery">麦乐送</button>
+      </div>
+
+      <div id="pickup-fields">
+        <label class="field">
+          <span>城市</span>
+          <input id="p-city" class="input" placeholder="如 西安市" autocomplete="off">
+        </label>
+        <label class="field">
+          <span>位置关键词</span>
+          <input id="p-keyword" class="input" placeholder="如 长安大厦 / 雁塔路" autocomplete="off">
+        </label>
+      </div>
+
+      <div id="delivery-fields" class="hidden">
+        <label class="field">
+          <span>送到哪个地址（来自麦当劳账号地址簿）</span>
+          <select id="p-address" class="input"><option value="">加载中…</option></select>
+        </label>
+      </div>
+
+      <label class="field">
+        <span>想吃什么 <em class="muted">（留空则按预算自动配餐）</em></span>
+        <input id="p-want" class="input" placeholder="如 巨无霸,中杯美式" autocomplete="off">
+      </label>
+      <div class="chips" id="want-chips"></div>
+
+      <label class="field">
+        <span>单人预算 <em class="muted">（元，可不填）</em></span>
+        <input id="p-budget" class="input" inputmode="decimal" placeholder="35">
+      </label>
+
+      <details class="adv">
+        <summary>高级选项</summary>
+        <label class="field">
+          <span>最多比价几家门店</span>
+          <input id="p-stores" class="input" inputmode="numeric" value="5">
+        </label>
+        <label class="check"><input type="checkbox" id="p-couponscan" checked> 探测「券专属商品」（可能要多花几次算价）</label>
+        <label class="check"><input type="checkbox" id="p-closed"> 连打烊门店也试一下</label>
+      </details>
+
+      <button id="p-run" class="btn primary big">开始比价</button>
+      <p class="hint">只算钱、不下单。要下单时再点结果里的「生成付款链接」，且必须你自己在麦当劳 App/网页里付款。</p>
+    </div>
+
+    <div id="p-progress" class="progress hidden">
+      <div class="progress-head"><span class="spinner"></span><span id="p-progress-title">正在比价…</span></div>
+      <pre id="p-log" class="log"></pre>
+    </div>
+
+    <div id="p-result"></div>
+  </section>
+
+  <!-- ───────────────────────── 团餐 -->
+  <section id="tab-group" class="tab-panel hidden">
+    <div class="card">
+      <p class="muted small">给「人数 + 人均预算 + 配送地址」算最省的团餐单，含满折/满减档位、拆单结论。</p>
+      <label class="field"><span>人数</span><input id="g-people" class="input" inputmode="numeric" placeholder="20"></label>
+      <label class="field"><span>人均预算（元）</span><input id="g-budget" class="input" inputmode="decimal" placeholder="35"></label>
+      <label class="field"><span>配送地址</span><select id="g-address" class="input"><option value="">加载中…</option></select></label>
+      <label class="field"><span>偏好 <em class="muted">（可留空）</em></span><input id="g-prefer" class="input" placeholder="如 汉堡,薯条"></label>
+      <button id="g-run" class="btn primary big">开始比价</button>
+    </div>
+
+    <div id="g-progress" class="progress hidden">
+      <div class="progress-head"><span class="spinner"></span><span id="g-progress-title">正在比价…</span></div>
+      <pre id="g-log" class="log"></pre>
+    </div>
+
+    <div id="g-result"></div>
+  </section>
+
+  <!-- ───────────────────────── 我的 -->
+  <section id="tab-me" class="tab-panel hidden">
+    <div class="card">
+      <h2>装到手机上（三步）</h2>
+      <ol class="steps">
+        <li>手机连上<b>和电脑同一个 Wi-Fi</b>。</li>
+        <li>用手机浏览器打开电脑上打印的那个<b>「手机上打开」</b>地址。</li>
+        <li>点浏览器菜单里的<b>「添加到主屏幕」</b>，以后点图标就能用。</li>
+      </ol>
+      <p class="muted small">iPhone 用 Safari（分享 → 添加到主屏幕）；Android 用 Chrome（⋮ → 添加到主屏幕）。</p>
+    </div>
+
+    <div class="card">
+      <h2>自检</h2>
+      <p class="muted small">检查 Token、握手、工具清单、地址簿条数。出问题先看这里。</p>
+      <button id="m-doctor" class="btn">运行自检</button>
+      <div id="m-doctor-out"></div>
+    </div>
+
+    <div class="card">
+      <h2>地址簿</h2>
+      <button id="m-addr" class="btn">读取地址簿</button>
+      <div id="m-addr-out"></div>
+    </div>
+
+    <div class="card">
+      <h2>关于</h2>
+      <p class="muted small" id="m-about">…</p>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar">
+  <button class="tab-item active" data-tab="phone"><span>🍔</span>点餐</button>
+  <button class="tab-item" data-tab="group"><span>👥</span>团餐</button>
+  <button class="tab-item" data-tab="me"><span>⚙️</span>我的</button>
+</nav>
+
+<div id="toast" class="toast hidden"></div>
+
+<!-- 复制兜底：http 页面里 navigator.clipboard 不可用 -->
+<div id="sheet" class="sheet hidden">
+  <div class="sheet-inner">
+    <div class="sheet-head"><b id="sheet-title">内容</b><button id="sheet-close" class="btn tiny">关闭</button></div>
+    <textarea id="sheet-text" class="sheet-text" readonly></textarea>
+  </div>
+</div>
+
+<script src="/app.js" type="module"></script>
+</body>
+</html>
