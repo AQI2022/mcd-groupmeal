@@ -17,6 +17,7 @@ import { McpClient } from './mcp-client.mjs';
 import { listAddresses, queryGroupMealStores, loadStoreProfile, resolveAddress, TtlCache } from './mcd.mjs';
 import { optimize } from './optimizer.mjs';
 import { renderReport, renderStores } from './render.mjs';
+import { solvePhoneOrder, renderPhoneCard, placeOrder, CHANNEL } from './phone.mjs';
 import { summarizeLadders } from './promotions.mjs';
 import { yuanToCents } from './money.mjs';
 import { MockClient } from './mock.mjs';
@@ -28,21 +29,36 @@ const USAGE = `mcd-groupmeal · 麦当劳团餐满减优化引擎
 
 用法：
   mcd-groupmeal optimize --people 20 --budget 35 --address 西安 [选项]
+  mcd-groupmeal phone    --city 西安市 --keyword 长安大厦 --want 巨无霸,中杯美式 [选项]
+  mcd-groupmeal phone    --channel delivery --address 西安 --want 巨无霸,薯条 [选项]
   mcd-groupmeal stores   --address 西安
   mcd-groupmeal demo
   mcd-groupmeal doctor
 
+phone（手机点餐）选项：
+  --channel <pickup|delivery>  到店自取（默认，不需要地址簿）/ 麦乐送（需要地址簿）
+  --city <城市>                到店必填（与 --keyword 同用，按位置搜店）
+  --keyword <位置关键词>       到店必填，如 长安大厦
+  --address, -a <text>         麦乐送：地址簿匹配文本（城市名/写字楼）
+  --want <a,b>                 想吃什么，如 巨无霸,中杯美式,薯条（不给则按预算自动配餐）
+  --budget, -b <yuan>          单人预算（元，可选；自动配餐时用于砍项）
+  --stores <int>               最多比价几家门店，默认 5
+  --max-calls <int>            算价调用硬上限，默认 60
+  --no-coupon-scan             不探测「券专属商品」
+  --include-closed             连打烊门店也尝试（默认跳过并列出来）
+  --pay                        真实创建订单并返回付款 H5 链接（会下真单，需你确认）
+  --demo                       手机点餐离线演示（构造数据，不联网、不需要 Token）
+  --json                       以 JSON 输出结果
+
 选项：
   --people, -n <int>      人数（必填，optimize 模式）
-  --budget, -b <yuan>     人均预算（元，必填）
+  --budget, -b <yuan>     人均预算（元，必填 optimize / 可选 phone）
   --address, -a <text>    地址匹配文本：城市名 / 写字楼名 / 完整地址
   --prefer <a,b>          偏好品类或餐品关键词，如 汉堡,薯条,饮料
   --assist <GMS001,...>   只考虑指定助餐档位
   --max-orders <int>      拆单上限，默认 3
   --variants <int>        每店候选篮子数，默认 3
-  --max-calls <int>       calculate-price 调用硬上限，默认 150
   --reservation <time>    预约时间 "yyyy-MM-dd HH:mm"（全链路透传）
-  --json                  以 JSON 输出结果
   --no-cache              关闭 10 分钟本地缓存
   --token <token>         临时指定 MCP Token（仅调试；正式用法见下）
   -h, --help              显示本帮助
@@ -55,12 +71,16 @@ Token 来源（按优先级）：
 function parseArgs(argv) {
   const out = { _: [] };
   const alias = { n: 'people', b: 'budget', a: 'address', h: 'help' };
+  const BOOL = new Set(['json', 'help', 'no-cache', 'no-coupon-scan', 'include-closed', 'pay', 'demo']);
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a.startsWith('--') || (a.startsWith('-') && a.length === 2 && a !== '-')) {
       const key = alias[a.replace(/^-+/, '')] ?? a.replace(/^-+/, '');
-      if (key === 'json' || key === 'help') { out[key] = true; continue; }
-      if (key === 'no-cache') { out.cache = false; continue; }
+      if (BOOL.has(key)) {
+        if (key === 'no-cache') out.cache = false;
+        else out[key] = true;
+        continue;
+      }
       const val = argv[i + 1];
       if (val === undefined || val.startsWith('--')) { out[key] = true; continue; }
       out[key] = val;
@@ -190,9 +210,59 @@ async function main() {
     return 0;
   }
 
+  // ---- 手机点餐：到店自取 / 麦乐送（个人小单，券驱动）
+  if (command === 'phone') {
+    const channel = args.channel === 'delivery' || args.channel === CHANNEL.DELIVERY ? CHANNEL.DELIVERY : CHANNEL.PICKUP;
+    if (channel === CHANNEL.PICKUP && !args.city && !args.keyword && !args.demo) {
+      process.stderr.write(
+        '❌ 到店点餐需要位置：--city 西安市 --keyword 长安大厦（或只给 --city，按收藏门店搜索）。\n' +
+          '   麦乐送请用：mcd-groupmeal phone --channel delivery --address 西安 --want 巨无霸,薯条\n' +
+          '   只想看效果（不联网、不需要 Token）：mcd-groupmeal phone --demo --want 巨无霸,美式中杯\n',
+      );
+      return 2;
+    }
+    const demoMode = args.demo === true;
+    const client = demoMode ? new MockClient() : buildClient(args).client;
+    const from = demoMode ? '演示数据（不联网）' : loadTokenConfig({ explicitToken: args.token })?.from ?? 'mcp-config.json';
+    const result = await solvePhoneOrder({
+      client,
+      channel,
+      addressQuery: args.address === true ? undefined : args.address,
+      city: args.city === true ? undefined : args.city,
+      keyword: args.keyword === true ? undefined : args.keyword,
+      want: splitList(args.want),
+      budgetCents: budgetPerPersonCents || undefined,
+      maxStores: Number(args.stores ?? 5),
+      maxCalls: Number(args['max-calls'] ?? 60),
+      couponFirst: args['no-coupon-scan'] !== true,
+      includeClosed: args['include-closed'] === true,
+      reservationDate: args.reservation,
+      cache,
+    });
+
+    if (args.pay && result.best) {
+      // ⚠️ 会创建真实未支付订单；--pay 是显式确认开关
+      const order = await placeOrder(client, result.best, { addressId: result.best.addressId });
+      process.stdout.write(
+        `\n🧾 已创建订单\n   orderId: ${order.orderId}\n   应付：¥${order.amount}\n   付款链接：${order.payH5Url}\n` +
+          '   （未支付；链接可在手机上直接打开付款，请自己核对金额与门店）\n\n',
+      );
+      if (args.json) process.stdout.write(JSON.stringify({ ...result, order }, null, 2) + '\n');
+      else process.stdout.write(renderPhoneCard(result) + '\n');
+      return 0;
+    }
+
+    if (args.json) process.stdout.write(JSON.stringify(result, null, 2) + '\n');
+    else {
+      if (demoMode) process.stdout.write('⚠️ 演示数据：门店名、券与价格均为构造数据，不是真实门店报价。\n\n');
+      process.stdout.write(`Token 来源：${from}\n\n`);
+      process.stdout.write(renderPhoneCard(result) + '\n');
+    }
+    return result.comparisons.length ? 0 : 1;
+  }
+
   const { client, from } = buildClient(args);
 
-  // stores 只做门店情报，不需要人数与预算（README/USAGE 里就是这么写的）。
   if (command === 'stores') {
     const result = await readStoresOnly(client, { addressQuery: args.address, cache, reservationDate: args.reservation });
     process.stdout.write(renderStores(result) + '\n');

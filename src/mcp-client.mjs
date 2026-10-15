@@ -239,11 +239,18 @@ export class McpClient {
   /**
    * 调用工具并归一化返回。
    *
-   * 注意：真实服务端会偶发 `code=500 服务器发生了未知的问题`（HTTP 仍是 200），
+   * 注意 1：真实服务端会偶发 `code=500 服务器发生了未知的问题`（HTTP 仍是 200），
    * 实测在 `query-promotions` 上遇到过。这属于**瞬时故障**，所以这里对 code=500
    * 做有限次退避重试；重试仍失败则如实返回失败，由上层降级。
    *
-   * @returns {Promise<{ok:boolean, data:any, json:any, text:string, code:number|null, message:string|null, tool:string}>}
+   * 注意 2：**有些工具只返回 Markdown，不返回 JSON**（实测 `available-coupons`「麦麦省券列表」、
+   * `campaign-calendar`「活动日历」）。它们没有 `success/code/data` 字段，若按「非 JSON 即失败」
+   * 处理，会把一次成功调用误判成失败。因此这里以「是否解析出业务 JSON」分流：
+   *   · 有 JSON → 按 `success && code==200` 判定（原口径不变）；
+   *   · 无 JSON 但有非空文本且 `isError !== true` → 视为成功，打上 `kind:'text'` 标并原样保留文本。
+   * 真正的失败仍有两条硬判据兜底：HTTP 层（401/4xx/5xx 抛 McpHttpError）与 JSON 业务 code。
+   *
+   * @returns {Promise<{ok:boolean, data:any, json:any, text:string, code:number|null, message:string|null, tool:string, kind?:'text'}>}
    */
   async callTool(name, args = {}, { retriesOnServerError = 2 } = {}) {
     const resolved = this.tools.length ? this.findTool(name) : name;
@@ -262,8 +269,10 @@ export class McpClient {
       }
       const text = contentToText(result?.content);
       const json = extractJson(text);
+      const hasJson = json !== null && json !== undefined;
       const code = typeof json?.code === 'number' ? json.code : null;
-      const ok = !!json?.success && (code === null || code === 200);
+      const isError = !!result?.isError;
+      const ok = hasJson ? !!json?.success && (code === null || code === 200) && !isError : !isError && text.trim().length > 0;
       if (!ok && code === 500 && attempt < retriesOnServerError) {
         await sleep(600 * 2 ** attempt);
         continue;
@@ -275,7 +284,8 @@ export class McpClient {
         code,
         message: json?.message ?? null,
         tool: resolved,
-        isError: !!result?.isError,
+        isError,
+        ...(hasJson ? {} : { kind: 'text' }),
       };
     }
   }

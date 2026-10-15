@@ -22,7 +22,9 @@ import { tierFor, classify, BUDGET_TIERS } from '../src/tiers.mjs';
 import { yuanToCents, formatCents, formatDiscountRate } from '../src/money.mjs';
 import { extractJson, matchBrace } from '../src/json.mjs';
 import { buildBaskets, buildPools } from '../src/basket.mjs';
-import { demoMenu, demoCalculatePrice, DEMO_STORES } from '../src/mock.mjs';
+import { demoMenu, demoCalculatePrice, DEMO_STORES, DEMO_COUPON_ONLY_CODE, demoCoupons, MockClient } from '../src/mock.mjs';
+import { buildCatalog, matchKeywords, couponPlans, priceCovers, solvePhoneOrder, renderPhoneCard, placeOrder, CHANNEL } from '../src/phone.mjs';
+import { availableCoupons, campaignCalendar } from '../src/mcd.mjs';
 
 // ---------------------------------------------------------------- 金额
 test('money: 元→分 与展示', () => {
@@ -286,4 +288,119 @@ test('mock: 满折场景下拆单必定更贵（与真实引擎结论一致）',
   const a = demoCalculatePrice({ store, gmServiceCode: 'GMS001', items: [{ productCode: '1005', quantity: 10 }] });
   const b = demoCalculatePrice({ store, gmServiceCode: 'GMS001', items: [{ productCode: '1005', quantity: 10 }] });
   assert.ok(a.price + b.price > single.price, '拆 2 单必须比不拆贵');
+});
+
+// ---------------------------------------------------------------- 手机点餐（phone）
+test('phone: 券商品不在菜单里也必须能匹配到（券找货）', () => {
+  const menu = demoMenu();
+  const coupons = demoCoupons();
+  const catalog = buildCatalog(menu, coupons);
+  // 9001 美式中杯只存在于券里，菜单里没有
+  assert.equal(menu.meals[DEMO_COUPON_ONLY_CODE], undefined);
+  const hit = matchKeywords(catalog, ['美式中杯']);
+  assert.equal(hit.picked.length, 1);
+  assert.equal(hit.picked[0].item.code, DEMO_COUPON_ONLY_CODE);
+  assert.equal(hit.picked[0].item.couponOnly, true);
+  assert.equal(hit.picked[0].item.couponId, 'DEMO-C2');
+});
+
+test('phone: 关键词匹配优先完全相等，且未命中时给相近建议', () => {
+  const catalog = buildCatalog(demoMenu(), demoCoupons());
+  const a = matchKeywords(catalog, ['巨无霸', '中薯条']);
+  assert.deepEqual(a.picked.map((p) => p.item.code), ['1001', '2001']);
+  const b = matchKeywords(catalog, ['不存在的商品']);
+  assert.equal(b.picked.length, 0);
+  assert.equal(b.missing.length, 1);
+});
+
+test('phone: 单券组合不会顺带用上别的券', () => {
+  const coupons = demoCoupons();
+  const cart = [
+    { productCode: '1001', quantity: 1, name: '巨无霸' },
+    { productCode: DEMO_COUPON_ONLY_CODE, quantity: 1, name: '美式中杯', couponId: 'DEMO-C2', couponCode: 'DEMOCODE2' },
+  ];
+  const plans = couponPlans(cart, coupons);
+  const onlyC1 = plans.find((p) => p.label.includes('巨无霸7折'));
+  assert.equal(onlyC1.items.find((i) => i.productCode === '1001').couponId, 'DEMO-C1');
+  assert.equal(onlyC1.items.find((i) => i.productCode === DEMO_COUPON_ONLY_CODE).couponId, undefined, '只用 C1 时不能挂 C2');
+  const both = plans.find((p) => p.label.startsWith('全部'));
+  assert.equal(both.items.find((i) => i.productCode === DEMO_COUPON_ONLY_CODE).couponId, 'DEMO-C2');
+});
+
+test('phone: priceCovers 识别「券商品被丢弃」的组合（防止假结论）', () => {
+  const requested = [{ productCode: '1001', quantity: 1 }, { productCode: DEMO_COUPON_ONLY_CODE, quantity: 1 }];
+  const dropped = { productList: [{ productCode: '1001', quantity: 1 }] };
+  const full = { productList: [{ productCode: '1001', quantity: 1 }, { productCode: DEMO_COUPON_ONLY_CODE, quantity: 1 }] };
+  assert.equal(priceCovers(dropped, requested), false);
+  assert.equal(priceCovers(full, requested), true);
+});
+
+test('phone: 到店自取端到端（打烊门店被排除，最优方案用上券）', async () => {
+  const client = new MockClient();
+  const result = await solvePhoneOrder({
+    client, channel: CHANNEL.PICKUP, city: '演示市', keyword: '演示路',
+    want: ['巨无霸', '美式中杯'], couponFirst: false,
+  });
+  assert.equal(result.channel, CHANNEL.PICKUP);
+  assert.equal(result.closed.length, 1, '打烊门店必须被列出来，而不是当成「没有菜单」');
+  assert.equal(result.closed[0].storeCode, '9000004');
+  assert.ok(result.comparisons.length >= 2);
+  const best = result.best;
+  assert.equal(best.best.complete, true, '最优方案必须买齐清单');
+  // 巨无霸 24.00×0.7 = 16.80；美式中杯 19.00×0.5 = 9.50 → 26.30
+  assert.equal(best.best.priceCents, 2630);
+  assert.equal(best.best.couponTitles.length, 2);
+  assert.equal(best.best.deliveryCents, 0, '到店自取没有配送费');
+  assert.equal(best.noCouponComplete, false, '含券商品时「不用券」买不齐，不能当基线');
+  assert.ok(best.couponOnlyItems.length === 1);
+  // 所有金额都来自算价：卡面必须能渲染出实付
+  const card = renderPhoneCard(result);
+  assert.match(card, /实付 ¥26\.30/);
+});
+
+test('phone: 麦乐送端到端（含配送+打包，且券后省得出来）', async () => {
+  const client = new MockClient();
+  const result = await solvePhoneOrder({ client, channel: CHANNEL.DELIVERY, addressQuery: '演示', want: ['巨无霸', '中薯条'], couponFirst: false });
+  assert.equal(result.channel, CHANNEL.DELIVERY);
+  const b = result.best;
+  // 巨无霸 24.00(券后 16.80) + 中薯条 15.00 = 31.80 商品 + 配送 6 + 打包 1.60
+  assert.equal(b.best.productPriceCents, 3180);
+  assert.equal(b.best.deliveryCents, 600);
+  assert.equal(b.best.priceCents, 3940);
+  assert.equal(b.couponSavingCents, 720, '比不用券省 = 24.00 × 30%');
+  assert.equal(b.noCouponComplete, true);
+});
+
+test('phone: 自动配餐（不给 want）按预算砍项，且不超预算', async () => {
+  const client = new MockClient();
+  const result = await solvePhoneOrder({
+    client, channel: CHANNEL.PICKUP, city: '演示市', keyword: '演示路',
+    budgetCents: 3000, couponFirst: false,
+  });
+  assert.ok(result.best, '自动配餐也必须给出方案');
+  assert.ok(result.best.best.items.length >= 1);
+  assert.equal(result.best.overBudget, result.best.best.priceCents > 3000);
+});
+
+test('phone: 下单只创建订单、不支付（离线后端验证参数拼装）', async () => {
+  const client = new MockClient();
+  const result = await solvePhoneOrder({ client, channel: CHANNEL.PICKUP, city: '演示市', keyword: '演示路', want: ['巨无霸'], couponFirst: false });
+  const order = await placeOrder(client, result.best);
+  assert.equal(order.orderId, 'DEMO-ORDER-0001');
+  assert.match(order.payH5Url, /^https:\/\//);
+});
+
+test('phone: 文字型工具（麦麦省券/活动日历）不会被误判为失败', async () => {
+  const client = new MockClient();
+  const avail = await availableCoupons(client);
+  assert.equal(avail.ok, true);
+  assert.equal(avail.kind, 'text');
+  assert.ok(avail.titles.length >= 2, '必须从 Markdown 里解析出券名');
+  const cal = await campaignCalendar(client);
+  assert.equal(cal.ok, true);
+  assert.ok(cal.titles.includes('演示活动-A'));
+  // 非文字型工具仍然业务失败返回失败
+  const bad = await client.callTool('query-meals', { storeCode: '9000004', beType: 1 });
+  assert.equal(bad.ok, false);
+  assert.equal(bad.code, 600057);
 });

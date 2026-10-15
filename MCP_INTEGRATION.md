@@ -37,7 +37,9 @@
 
 ---
 
-## 2. 实际使用的 Tool（5 个，团餐链路全覆盖）
+## 2. 实际使用的 Tool（团餐链路 5 个 + 手机点餐链路 6 个）
+
+团餐链路（`optimize`）：
 
 | # | Tool | 在本项目中的职责 | 关键入参 | 关键出参 |
 |--:|---|---|---|---|
@@ -47,11 +49,25 @@
 | 4 | `query-promotions` | **团餐满折/满减规则**（本项目的技术护城河） | `storeCode`, `beCode`, `beType=6`, `orderType=2` | `data[]`: `promotionType`(31满额减/33订单折扣), `ruleCategory`(30满折/40满减), `gmServiceCode`, `products[]`, `ruleDetail` |
 | 5 | `calculate-price` | **官方权威算价**（唯一可信的金额口径） | `storeCode`, `beCode`, `beType=6`, `orderType=2`, `gmServiceCode`, `addressId`, `items[]` | `data`: `productOriginalPrice` / `discount` / `deliveryPrice` / `packingPrice` / `price` / `enjoyable` |
 
+手机点餐链路（`phone`，到店自取 beType=1 / 麦乐送 beType=2）：
+
+| # | Tool | 在本项目中的职责 | 关键入参 | 关键出参 |
+|--:|---|---|---|---|
+| 1 | `query-nearby-stores` | 到店：城市 + 位置 → 附近门店与距离（**不需要地址簿**） | `beType=1`, `searchType=2`, `city`, `keyword` | `data[]`: `storeCode`（无 `beCode`）, `storeName`, `distance`, `businessStatus` |
+| 2 | `delivery-query-stores` | 麦乐送：地址 → 可配送门店 | `addressId`, `beType=2` | `data[]`: `storeCode`, `beCode`, `businessStatus` |
+| 3 | `query-meals` | 门店菜单与单价（到店实测 130 项 / 麦乐送 125 项） | `storeCode`, `orderType`, `beType`（外送加 `beCode`） | 同团餐 |
+| 4 | `query-store-coupons` | **本账号在该店该渠道可用的券**（券找货的入口） | `storeCode`, `orderType`, `beType`（外送加 `beCode`） | `data[]`: `title`, `couponId`, `couponCode`, `tradeDateTime`, `products[{productCode,productName}]` |
+| 5 | `calculate-price` | 逐「用券组合」验价（含 `items[].couponId`/`couponCode`） | + `items[].couponId`/`couponCode` | 同团餐（到店无配送费） |
+| 6 | `create-order` | 可选：生成**未支付**订单 + `payH5Url`（手机可直接付款） | `storeCode`, `orderType`, `beType`, `items`, `takeWayCode`(到店必传) / `addressId`(外送必传) | `data`: `orderId`, `amount`, `payH5Url`, `status` |
+
 辅助（非核心链路）：
 
 | Tool | 用途 |
 |---|---|
-| `delivery-query-addresses` | 读取账号地址簿 → `addressId`（**没有地址就查不到任何门店**） |
+| `delivery-query-addresses` | 读取账号地址簿 → `addressId`（**没有地址就查不到任何外送/团餐门店**） |
+| `available-coupons` | 麦麦省**可领取**券清单（实测只返回 Markdown，且不含券 ID → 必须先 `auto-bind-coupons`） |
+| `auto-bind-coupons` | 一键领取麦麦省券（**会改写账号券包**，本项目默认不调用） |
+| `campaign-calendar` | 当月营销活动日历（实测只返回 Markdown） |
 | `now-time-info` | 用服务端时间校验促销规则有效期，避免客户端时钟偏差 |
 
 > 为什么不用官方 `@modelcontextprotocol/sdk`：本项目要打「一行命令能跑」的体验，零运行时依赖让 `npx mcd-groupmeal` 不需要拉任何包；同时直连 JSON-RPC 层便于排障（`mcd-groupmeal doctor` 会把握手到工具清单的结果全打印出来）。
@@ -174,6 +190,30 @@
 → **账号里没有配送地址 = 一家团餐门店都查不到**。这是假阴性，不是工具坏了。
 本项目在地址簿为空时抛出 `EMPTY_ADDRESS_BOOK` 并给出明确指引，而不是静默返回「0 家门店」。
 
+> 补充（`phone` 模式新增）：**到店自取（`query-nearby-stores`）不需要地址簿**，
+> 只要 `city` + `keyword` 就能列店与距离，且 beType=1 返回的门店**没有 `beCode`**（后续调用一律不传）。
+> 这是「手机上点餐」里依赖最少的一条路。
+
+### 4.7 手机点餐链路的 5 条实测补充（2026-10-15）
+
+`phone` 模式把链路扩到「到店自取 / 麦乐送」后，又踩到 5 个必须写下来的行为：
+
+| # | 实测行为 | 影响与处置 |
+|---|---|---|
+| 1 | 非营业时间 `query-meals` 返回 **`code=600057 门店可能已关闭或不在营业时间`**，菜单为空 | 不能把「菜单 0 项」当成「这家店没有菜单」。本项目识别 600057 → 门店进「已排除（当前非营业时间）」 |
+| 2 | `query-store-coupons` 的 `products[].productCode` **可能不在 `query-meals` 菜单里**（实测 `9900000119 美式中杯` 不在 130 项菜单中） | 这是**券专属商品**：菜单搜不到、不带券算价返回 `price=0` 且 `productList=[]`。「券找货」必须从券里取商品码 |
+| 3 | 券专属商品在「不用券」组合里会被官方**直接丢弃** | 若按价格取最小值，会得出「别用券更省」的**假结论**。必须先按回执 `productList` 校验「是否买齐清单」（`priceCovers()`） |
+| 4 | **券是分渠道的**：同一门店同一账号，到店自取有 2 张券、麦乐送 0 张、团餐 0 张；把到店券塞进麦乐送算价 → `600012 当前优惠券不可用！` | 「我有券」≠「这单能用券」。必须按**门店 + 渠道**分别查 `query-store-coupons` |
+| 5 | `available-coupons` 与 `campaign-calendar` **只返回 Markdown，没有 `success/code/data`** | 客户端若按「非 JSON 即失败」判定，会把成功调用误判为失败。本项目为这类工具返回 `kind:'text'` 并单独解析；要先 `auto-bind-coupons` 领券才会带出 `couponId` 进入算价 |
+
+另外一个**渠道差异**的量化对照（同一家店、同一个商品、同一张券）：
+
+| 渠道 | 该店可用券数 | 「美式中杯」带券算价 |
+|---|---:|---|
+| 到店自取（orderType=1 / beType=1） | 2 | `productPrice=1330`、`discount=570`（¥19.00 → ¥13.30） |
+| 麦乐送（orderType=2 / beType=2） | 0 | 业务失败 `600012 当前优惠券不可用！` |
+| 团餐（beType=6） | 0 | — |
+
 ---
 
 ## 5. 业务价值
@@ -186,6 +226,8 @@
 | **拆单的诚实结论** | 穷举 k ≤ 3 拆法并逐单用官方算价验证。实测满折场景下拆 2 单要**多付 ¥26.42~52.55**，所以直接告诉用户「**别拆**」——比承诺「立省 X 元」更抗打脸 | `calculate-price` |
 | **官方验价兜底** | 所有对外数字都来自 `calculate-price`，本地模型只用于预筛。任何方案都能复现、能证伪 | `calculate-price` |
 | **凑单提示** | 直接用官方 `enjoyable.balance` 告诉用户距下一档还差多少 | `calculate-price` |
+| **手机点餐「券找货」** | 把账号在该店该渠道可用的券 × 菜单 × 官方算价交叉，算出「去哪家店、点这些、勾哪张券、实付多少」；还能算出券锁着但菜单里没有的商品（实测 ¥19.00 → ¥13.30） | `query-nearby-stores` / `delivery-query-stores` + `query-store-coupons` + `query-meals` + `calculate-price` |
+| **下单闭环（可选）** | `create-order` 返回 `payH5Url`，手机上点开即可付款；本项目默认只算不下单，`--pay` 才创建**未支付**订单 | `create-order` |
 
 ---
 
@@ -197,7 +239,12 @@
 | `node tools/city-scan.mjs` | 8 城团餐门店、店间价差、折扣阶梯对比 | [`docs/CITY-COMPARISON.md`](./docs/CITY-COMPARISON.md) |
 | `node src/cli.mjs doctor` | 握手 / 工具清单 / 地址簿自检 | 终端输出 |
 | `node src/cli.mjs demo` | **不需要 Token**，用离线演示数据跑通同一条代码路径 | 终端输出 |
-| `node test/core.test.mjs` | 24 个单元测试（规则解析、拆单、分档、MCP 返回体解析、离线定价器对齐官方口径） | 通过/失败 |
+| `node src/cli.mjs phone --demo` | **不需要 Token**，手机点餐链路离线演示（含券、券专属商品、打烊门店） | 终端输出 |
+| `node test/core.test.mjs` | 33 个单元测试（规则解析、拆单、分档、MCP 返回体解析、离线定价器对齐官方口径、手机点餐 9 项） | 通过/失败 |
+
+`phone` 模式新增的 9 项测试覆盖的正是上面 §4.7 的坑：
+券商品匹配、单券组合不串券、`priceCovers()` 识别「券商品被丢弃」、打烊门店排除、
+到店/麦乐送端到端实付、自动配餐预算、下单参数拼装、文字型工具不误判。
 
 ---
 

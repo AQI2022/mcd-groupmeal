@@ -1,10 +1,11 @@
 <p align="center">
   <strong>mcd-groupmeal</strong><br/>
-  麦当劳企业团餐满减优化引擎 · MCD Group-Meal Deal Optimizer
+  麦当劳团餐满减优化引擎 · 手机点餐比价 · MCD Deal Optimizer
 </p>
 
 <p align="center">
-  <em>给「人数 + 人均预算 + 配送地址」，在所有可配送团餐门店里算出最省的那一单。</em>
+  <em>团餐：给「人数 + 人均预算 + 配送地址」，在所有可配送团餐门店里算出最省的那一单。<br/>
+  手机点餐：给「位置 + 想吃什么」，算出该去哪家店、用哪张券、实付多少。</em>
 </p>
 
 ---
@@ -17,14 +18,20 @@
 **它不是点餐助手，是算钱工具。** 输出可量化、可复现、可证伪。
 
 > 📖 **不知道怎么开始？看 [`docs/USER-GUIDE.md`](./docs/USER-GUIDE.md)** —— 四种用法（零安装 / Windows 双击 / 命令行 / 当库引入）、完整参数表、输出逐列解读、前置条件与故障排查。
+> 📱 **在手机上点餐怎么用最省？看 [`docs/PHONE-GUIDE.md`](./docs/PHONE-GUIDE.md)** —— 到店自取 / 麦乐送、券找货、六个实测坑（打烊 `600057`、券商品不在菜单、券分渠道…）。
 
 ```bash
-node src/cli.mjs optimize --people 20 --budget 35 --address 西安
+node src/cli.mjs optimize --people 20 --budget 35 --address 西安   # 团餐
+node src/cli.mjs phone --city 西安市 --keyword 长安大厦 --want 巨无霸,中杯美式   # 手机点餐
 ```
 
 **真实运行结果（不是示意图）**：20 人 · 人均预算 ¥35 · 西安某写字楼地址
 → 3 家可配送团餐门店、最优门店实付 **¥504.80**、人均 **¥25.24**、总优惠 **¥209.20（31.2%）**，
 拆单结论「**别拆**」（拆 2 单要多付 ¥26.42~52.55）。完整原样输出见 [`docs/EXAMPLE-RUN.md`](./docs/EXAMPLE-RUN.md)。
+
+手机点餐同一天实测：西安长安大厦到店自取「巨无霸 + 中杯美式」
+→ 5 家门店里当晚只有 1 家营业，用账号里的「新人专享-中杯美式7折」实付 **¥39.80**（省 ¥5.70），
+且该券锁着的「美式中杯」**在 130 项菜单里根本搜不到**（券专属商品）。详见 [`docs/PHONE-GUIDE.md`](./docs/PHONE-GUIDE.md)。
 
 ---
 
@@ -60,6 +67,20 @@ node src/cli.mjs optimize --people 20 --budget 35 --address 西安
 
 外加一个官方引擎主动告诉你的增量信息：**再加多少钱能升级到下一档折扣**（`calculate-price` 返回的 `enjoyable.balance`）。
 
+### 还能回答「我在手机上点餐怎么点最省」（`phone` 模式）
+
+团餐之外，`phone` 模式面向**个人手机点餐**（到店自取 / 麦乐送）：
+给它「位置 + 想吃什么」，它把**你账号里该店该渠道可用的券** × **门店菜单** × **官方算价**交叉一遍，
+输出「去这家店、点这些、勾这张券、实付这么多」。
+
+```bash
+node src/cli.mjs phone --city 西安市 --keyword 长安大厦 --want 巨无霸,中杯美式
+node src/cli.mjs phone --channel delivery --address 西安 --want 巨无霸,薯条
+node src/cli.mjs phone --demo                       # 离线演示，不需要 Token
+```
+
+完整的手机点餐用法、六个实测坑与边界说明见 **[`docs/PHONE-GUIDE.md`](docs/PHONE-GUIDE.md)**。
+
 ---
 
 ## 快速开始
@@ -67,7 +88,8 @@ node src/cli.mjs optimize --people 20 --budget 35 --address 西安
 ### 最省事的两条路
 
 - **Windows 不想碰命令行**：双击 `bin\mcd-meal.cmd` —— 依次问你「人数 / 人均预算 / 地址」，出比价结果；失败时直接告诉你下一步该点哪里。
-- **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）。
+- **手机上点餐**：双击 `bin\mcd-phone.cmd` —— 依次问你「城市 / 位置 / 想吃什么 / 预算」，出「手机点餐卡」。
+- **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）；手机点餐用 `bin\mcd-phone.cmd --demo`。
 - **本机自检**：双击 `bin\mcd-doctor.cmd`（Token / 握手 / 工具清单 / 地址簿，一次看清）。
 
 ### 0. 零配置试用（不需要 Token，不发任何网络请求）
@@ -114,7 +136,7 @@ node src/cli.mjs optimize --people 20 --budget 35 --address 西安 --json
 ```bash
 node tools/lifeline-probe.mjs   # A~E 生死线验证 → docs/LIFELINE.md
 node tools/city-scan.mjs        # 8 城门店/店间价差/折扣阶梯 → docs/CITY-COMPARISON.md
-node test/core.test.mjs         # 24 个单元测试
+node test/core.test.mjs         # 33 个单元测试（含手机点餐 9 项）
 ```
 
 ---
@@ -207,27 +229,30 @@ node test/core.test.mjs         # 24 个单元测试
 ```
 bin/
   mcd-meal.cmd       双击即用：问人数/预算/地址 → 出比价结果
+  mcd-phone.cmd      双击即用（手机点餐）：问城市/位置/想吃什么/预算 → 出点餐卡
   mcd-doctor.cmd     自检：Token / 握手 / 工具清单 / 地址簿
   mcd-demo.cmd       演示模式（无需 Token）
   meal.mjs           上面三个 .cmd 调用的友好入口（中文提示 + 失败指引）
+  phone.mjs          手机点餐的友好入口（同上，手机点餐版）
 src/
-  cli.mjs          CLI 入口（optimize / stores / demo / doctor）
+  cli.mjs          CLI 入口（optimize / phone / stores / demo / doctor）
   mcp-client.mjs   零依赖 Streamable HTTP JSON-RPC 客户端（会话、SSE、限流、退避）
   json.mjs         MCP 返回体「markdown + 内嵌 JSON」的平衡花括号解析器
-  mcd.mjs          5 个官方工具的领域封装 + 归一化（含业务错误码处置与降级）
+  mcd.mjs          官方工具的领域封装 + 归一化（含业务错误码处置与降级、文字型工具）
   promotions.mjs   满折/满减规则解析 → 可判定谓词 + 折扣函数
   tiers.mjs        官方人均预算分档 → 可执行约束
   basket.mjs       候选篮子生成（满足分档与偏好）
   split.mjs        拆单枚举（k ≤ 3，含「拆了不赚」的数学判据）
-  optimizer.mjs    跨门店 × 助餐档 × 篮子 × 拆单 的求解与打分
+  optimizer.mjs    跨门店 × 助餐档 × 篮子 × 拆单 的求解与打分（团餐）
+  phone.mjs        手机点餐求解：门店 × 券 × 清单 × 渠道 的实付比价（个人单）
   render.mjs       比价矩阵 / 结论 / 凑单提示的渲染
   mock.mjs         离线演示后端（**演示数据**，代码路径与线上一致）
   money.mjs        分/元换算与格式化
 tools/
   lifeline-probe.mjs  A~E 生死线验证器
   city-scan.mjs       多城市门店与店间价差扫描器
-test/core.test.mjs    24 个零依赖单元测试
-docs/                 使用指南 + 实测报告（原样输出、生死线、8 城对比）
+test/core.test.mjs    33 个零依赖单元测试
+docs/                 使用指南 + 手机点餐指南 + 实测报告（原样输出、生死线、8 城对比）
 ```
 
 ---

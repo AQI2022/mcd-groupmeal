@@ -1,7 +1,7 @@
 {
   "name": "mcd-groupmeal",
   "version": "1.0.0",
-  "description": "麦当劳企业团餐满减优化引擎 · 给「人数 + 人均预算 + 配送地址」，跨所有可配送团餐门店算出最省的那一单（麦当劳中国 MCP）",
+  "description": "麦当劳团餐满减优化引擎 + 手机点餐比价 · 给「人数 + 人均预算 + 配送地址」算最省的团餐单，也能给「想吃什么 + 位置」算出该去哪家店、用哪张券、实付多少（麦当劳中国 MCP）",
   "type": "module",
   "bin": {
     "mcd-groupmeal": "src/cli.mjs"
@@ -9,6 +9,7 @@
   "main": "src/optimizer.mjs",
   "exports": {
     ".": "./src/optimizer.mjs",
+    "./phone": "./src/phone.mjs",
     "./promotions": "./src/promotions.mjs",
     "./split": "./src/split.mjs",
     "./mcp": "./src/mcp-client.mjs"
@@ -30,7 +31,10 @@
   "scripts": {
     "demo": "node src/cli.mjs demo",
     "doctor": "node src/cli.mjs doctor",
+    "phone": "node src/cli.mjs phone",
+    "phone:demo": "node src/cli.mjs phone --demo --want 巨无霸,美式中杯",
     "test": "node --test test/",
+    "test:direct": "node test/core.test.mjs",
     "lifeline": "node tools/lifeline-probe.mjs",
     "city-scan": "node tools/city-scan.mjs"
   },
@@ -44,6 +48,9 @@
     "group-meal",
     "团餐",
     "满减",
+    "手机点餐",
+    "麦乐送",
+    "优惠券",
     "optimizer",
     "zero-dependency"
   ],
