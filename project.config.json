@@ -1,0 +1,41 @@
+{
+  "description": "mcd-groupmeal · 微信小程序（团餐比价 + 手机点餐）",
+  "appid": "touristappid",
+  "projectname": "mcd-groupmeal",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "compileType": "miniprogram",
+  "libVersion": "3.5.5",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "coverView": true,
+    "packNpmManually": false,
+    "nodeModules": false,
+    "autoAudits": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "showShadowRootInWxmlPanel": true
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "首页",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "设置",
+          "pathName": "pages/settings/settings",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

@@ -13,6 +13,7 @@
  *   - 限流 600 次/分钟，超限返回 429。
  */
 import { contentToText, extractJson } from './json.mjs';
+import { httpFetch } from './http-fetch.mjs';
 
 export class McpHttpError extends Error {
   constructor(message, { status, body } = {}) {
@@ -88,7 +89,7 @@ export class McpClient {
     this.url = url;
     this.timeoutMs = timeoutMs;
     this.maxRetries = maxRetries;
-    this.fetchImpl = fetchImpl || globalThis.fetch;
+    this.fetchImpl = fetchImpl || (typeof globalThis.fetch === 'function' ? globalThis.fetch : httpFetch);
     this.logger = logger || (() => {});
     this.bucket = new TokenBucket(rpm);
     this.sessionId = null;

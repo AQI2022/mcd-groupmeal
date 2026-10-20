@@ -1,0 +1,20 @@
+{
+  "generatedBy": "tools/build-mp-cloud.mjs",
+  "source": "src/",
+  "files": {
+    "money.mjs": "53e52bddc1ce14e91bf5561c3a5609f68496a7009e93dd55a01a0d2d8dced1f7",
+    "json.mjs": "b1de3ad4bec45dd78bdb3ed3abf450a5c9121719aab8eb6d4561c34566f183ca",
+    "http-fetch.mjs": "86e70e462bd7934b8b4b4713ac2194d019b9cf256a5f3583b9033d2653d88901",
+    "mcp-client.mjs": "aa4491ca89a05a11608bef300726e7b30f8bb4d0985a18304583a93c349ac893",
+    "mcd.mjs": "79e8472ba56ea8deb9c05f2bdffd4d3d55639a34c8334ad26a704f20deeee2aa",
+    "tiers.mjs": "14e2a1e6bae4c038ac9439839cbf28263cfc88632c50ed7f61ab459e7c908e06",
+    "promotions.mjs": "8bede0874312124e4a72a2113b43aa0f36af2b2a7df49d266d5419b108965cac",
+    "basket.mjs": "6443e73b5f7b9d7e815978ac00477a3a529167ecd0c2b271a5452139b83469f5",
+    "split.mjs": "8b739722c903578180833ba3fc33aa34e825db5ac457bf86db245107f467fa88",
+    "optimizer.mjs": "3692a8e608545d71bce8a720d3a2ee6af422bcc5a7d506b2707e921d78ead336",
+    "render.mjs": "d56de6d6cc943430db98613a5f3a2d9f66caa37e5171c2ea2db454ed640b2c72",
+    "phone.mjs": "b07fc3148de558994b44d176ccf42bb00d15e75ae2c1b1f7881b8920f7cc5410",
+    "mock.mjs": "9f41303427b222d4964b962d1fbc6d9f88ae2b526532aea4a1fd6f717a0c8518",
+    "slim.mjs": "28e95dcfabe6dc4da5249ef44a7f13b3289729fc4c3f97af8b92177e32b3daf2"
+  }
+}

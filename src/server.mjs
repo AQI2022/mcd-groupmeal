@@ -47,7 +47,7 @@ import { loadTokenConfig } from './cli.mjs';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const PUBLIC_DIR = path.join(ROOT, 'public');
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 // ───────────────────────────────────────────────────────────── 小工具
 
@@ -505,7 +505,31 @@ async function handleApi(req, res, url, pathname, state, jobs) {
     const job = jobs.get(id);
     if (!job) return json(res, 404, { ok: false, error: '任务不存在或已过期', code: 'NO_JOB' });
 
-    if (!sub && method === 'GET') return json(res, 200, { ok: true, job: job.toJSON() });
+    if (!sub && method === 'GET') {
+      // 小程序端轮询：`?from=N` 只回第 N 条之后的新日志。
+      // 为什么需要它：真实链路的 result 对象有几十~几百 KB（含每个方案的商品明细），
+      // 每秒把全量结果重传一次会直接拖死手机网络；只回增量则每次只有几百字节。
+      const fromRaw = url.searchParams.get('from');
+      if (fromRaw !== null) {
+        const from = Math.max(0, Math.min(job.logs.length, Number(fromRaw) || 0));
+        const payload = {
+          id: job.id,
+          kind: job.kind,
+          status: job.status,
+          logs: job.logs.slice(from),
+          logTotal: job.logs.length,
+          startedAt: job.startedAt,
+          endedAt: job.endedAt,
+        };
+        // 任务没结束时绝不带 result（见上）
+        if (job.status !== 'running') {
+          payload.result = job.result;
+          payload.error = job.error;
+        }
+        return json(res, 200, { ok: true, job: payload });
+      }
+      return json(res, 200, { ok: true, job: job.toJSON() });
+    }
 
     if (sub === '/stream' && method === 'GET') {
       res.writeHead(200, {
@@ -729,6 +753,11 @@ export async function main(argv = process.argv.slice(2)) {
   lines.push(`     模式：${state.demo ? '离线演示（不联网、不需要 Token）' : `真实 MCP（Token 来源：${tokenFrom}）`}`);
   lines.push(`     访问码：${state.accessKey || '已关闭（--no-key）'}`);
   if (state.accessKey) lines.push('     （手机打开一次后会自动记住，之后可直接用短地址；访问码仅本次运行有效）');
+  lines.push('');
+  lines.push('     微信小程序：在小程序「设置」里填服务器地址 ——');
+  lines.push(`       开发者工具（同一台电脑）：http://127.0.0.1:${actualPort}`);
+  if (lans.length) lines.push(`       真机预览（同一 Wi-Fi）：  http://${lans[0].address}:${actualPort}`);
+  lines.push(`       访问码：${state.accessKey || '（已关闭，可留空）'}`);
   lines.push('');
   lines.push('     手机连不上时依次检查：① 是否同一个 Wi-Fi；② Windows 防火墙是否放行 Node；');
   lines.push('     ③ 路由器是否开了「AP 隔离」。Ctrl+C 停止服务。');

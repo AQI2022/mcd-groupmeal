@@ -1,0 +1,272 @@
+<view class="container">
+
+  <!-- ── 进度 ────────────────────────────────────── -->
+  <view class="card" wx:if="{{status === 'starting' || status === 'running'}}">
+    <view class="card-title">
+      <text>{{statusText}}</text>
+      <text class="sub">{{elapsedText}}</text>
+    </view>
+    <view class="muted small" wx:if="{{transport === 'cloud'}}">
+      云函数模式是一次请求算到底（最长约 60 秒），没有中间进度；界面停在这一页就说明还在算。
+    </view>
+    <view class="muted small" wx:else>真实链路要跑几十次官方算价，下面的日志实时刷新。</view>
+    <view class="loading-bar"><view class="loading-bar-inner"></view></view>
+    <view class="logs" wx:if="{{logs.length}}" style="margin-top:20rpx">
+      <view class="log-line dim" wx:for="{{logs}}" wx:key="id">› {{item.text}}</view>
+    </view>
+    <view class="muted small" style="margin-top:14rpx">已收到 {{logTotal}} 行日志</view>
+  </view>
+
+  <!-- ── 失败 ────────────────────────────────────── -->
+  <view class="card" wx:if="{{status === 'failed'}}">
+    <view class="card-title">
+      <text>没有算出来</text>
+      <text class="sub">{{elapsedText}}</text>
+    </view>
+    <view class="note note-error">{{failedText}}</view>
+    <view class="note" wx:if="{{failedHint}}">{{failedHint}}</view>
+    <view class="btn-bar">
+      <button class="btn btn-primary" bindtap="retry">重试</button>
+      <button class="btn" bindtap="goSettings">检查设置</button>
+    </view>
+    <view class="logs" wx:if="{{logs.length}}" style="margin-top:20rpx">
+      <view class="log-line dim" wx:for="{{logs}}" wx:key="id">› {{item.text}}</view>
+    </view>
+  </view>
+
+  <!-- ── 没有可用方案 ─────────────────────────────── -->
+  <view class="card" wx:if="{{status === 'done' && vm && vm.noPlan}}">
+    <view class="card-title">
+      <text>{{vm.headline}}</text>
+      <text class="sub">{{elapsedText}}</text>
+    </view>
+    <view class="note">{{vm.hint}}</view>
+    <view class="muted small" wx:if="{{vm.addressText}}" style="margin-top:12rpx">📍 {{vm.addressText}}</view>
+    <view class="btn-bar">
+      <button class="btn btn-primary" bindtap="retry">换参数再算</button>
+      <button class="btn" bindtap="goHome">回首页</button>
+    </view>
+  </view>
+
+  <!-- ── 团餐结果 ─────────────────────────────────── -->
+  <block wx:if="{{status === 'done' && vm && !vm.noPlan && kind === 'group'}}">
+
+    <view class="card">
+      <view class="card-title">
+        <text>🏆 最省的一单</text>
+        <text class="sub">用时 {{elapsedText}}</text>
+      </view>
+      <view class="store-line">
+        <text class="store-name">{{vm.best.storeName}}</text>
+        <text class="pill pill-red" wx:if="{{vm.best.assistName}}">{{vm.best.assistName}}</text>
+      </view>
+      <view class="muted small" wx:if="{{vm.addressText}}" style="margin-top:6rpx">📍 {{vm.addressText}}</view>
+
+      <view class="price-row">
+        <view class="price-left">
+          <text class="price-big">{{vm.best.priceText}}</text>
+          <text class="price-tag">实付</text>
+        </view>
+        <view class="perhead">
+          <text class="perhead-num">{{vm.best.perHeadText}}</text>
+          <text class="muted small">/人</text>
+        </view>
+      </view>
+
+      <view class="row"><text class="row-label">商品小计</text><text class="row-value">{{vm.best.productOriginalText}}</text></view>
+      <view class="row" wx:if="{{vm.best.discountText}}">
+        <text class="row-label">优惠</text>
+        <text class="row-value accent">{{vm.best.discountText}}（省 {{vm.best.savedPct}}%）</text>
+      </view>
+      <view class="row" wx:if="{{vm.best.showExtraFees}}">
+        <text class="row-label">配送 + 打包</text>
+        <text class="row-value">{{vm.best.deliveryText}} + {{vm.best.packingText}}</text>
+      </view>
+      <view class="row" wx:if="{{vm.best.budgetText}}">
+        <text class="row-label">人均预算</text>
+        <text class="row-value">{{vm.best.budgetText}}</text>
+      </view>
+      <view class="note" wx:if="{{vm.best.nudgeText}}">{{vm.best.nudgeText}}</view>
+      <view class="note note-error" wx:if="{{vm.overBudget}}">这一单超出了你给的人均预算：可以调低人数或预算，或换一家门店的组合。</view>
+    </view>
+
+    <view class="card" wx:if="{{vm.stores.length > 1}}">
+      <view class="card-title">
+        <text>跨门店比价</text>
+        <text class="sub">{{vm.stores.length}} 个组合</text>
+      </view>
+      <view class="list-item {{item.isBest ? 'best' : ''}}" wx:for="{{vm.stores}}" wx:key="key">
+        <view class="item-head">
+          <text class="item-name">{{item.storeName}}</text>
+          <text class="item-price {{item.isBest ? '' : 'plain'}}">{{item.priceText}}</text>
+        </view>
+        <view class="muted small">
+          {{item.assistName}}｜人均 {{item.perHeadText}}<text wx:if="{{item.discountText}}">｜优惠 {{item.discountText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{vm.split}}">
+      <view class="card-title">
+        <text>拆单结论</text>
+        <text class="pill {{vm.split.shouldSplit ? 'pill-green' : 'pill-red'}}">{{vm.split.headline}}</text>
+      </view>
+      <view class="small">{{vm.split.reason}}</view>
+      <view class="muted small" wx:if="{{vm.split.bestSplitText}}" style="margin-top:10rpx">最优拆法：{{vm.split.bestSplitText}}</view>
+    </view>
+
+    <view class="card" wx:if="{{vm.savings}}">
+      <view class="card-title"><text>省在哪</text><text class="sub">{{vm.callsUsed}} 次算价</text></view>
+      <view class="row" wx:if="{{vm.savings.vsSameStoreWorstText}}">
+        <text class="row-label">助餐档位</text>
+        <text class="row-value good">{{vm.savings.vsSameStoreWorstText}}</text>
+      </view>
+      <view class="row" wx:if="{{vm.savings.vsNextStoreText}}">
+        <text class="row-label">门店选择</text>
+        <text class="row-value good">{{vm.savings.vsNextStoreText}}</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- ── 手机点餐结果 ─────────────────────────────── -->
+  <block wx:if="{{status === 'done' && vm && !vm.noPlan && kind === 'phone'}}">
+
+    <view class="card">
+      <view class="card-title">
+        <text>🍟 手机点餐卡</text>
+        <text class="sub">{{vm.channelText}}</text>
+      </view>
+      <view class="store-line">
+        <text class="store-name">{{vm.best.storeName}}</text>
+        <text class="pill" wx:if="{{vm.best.distanceText}}">{{vm.best.distanceText}}</text>
+      </view>
+      <view class="muted small" wx:if="{{vm.addressText}}" style="margin-top:6rpx">📍 {{vm.addressText}}</view>
+      <view class="muted small" wx:if="{{vm.locationText}}">🔎 {{vm.locationText}}</view>
+      <view class="muted small">🏪 备选门店 {{vm.storesCount}} 家 · 已排除待营业 {{vm.closedCount}} 家</view>
+
+      <view class="section-title" style="margin-top:22rpx">这样点</view>
+      <view class="list-item" wx:for="{{vm.best.items}}" wx:key="name">
+        <view class="item-head">
+          <text class="item-name">{{item.name}}</text>
+          <text class="pill pill-yellow" wx:if="{{item.coupon}}">🎟️ 券</text>
+        </view>
+      </view>
+      <view class="muted small" wx:if="{{vm.best.itemsNote}}" style="margin-top:8rpx">{{vm.best.itemsNote}}</view>
+
+      <view class="note" wx:if="{{vm.best.couponsText}}" style="margin-top:14rpx">🎟️ 用券：{{vm.best.couponsText}}</view>
+      <view class="note" wx:else style="margin-top:14rpx">{{vm.best.couponHint}}</view>
+
+      <view class="price-row">
+        <view class="price-left">
+          <text class="price-big">{{vm.best.priceText}}</text>
+          <text class="price-tag">实付</text>
+        </view>
+        <view class="perhead" wx:if="{{vm.best.savingText}}">
+          <text class="muted small">{{vm.best.savingText}}</text>
+        </view>
+      </view>
+
+      <view class="row"><text class="row-label">商品小计</text><text class="row-value">{{vm.best.originalText}}</text></view>
+      <view class="row" wx:if="{{vm.best.discountText}}">
+        <text class="row-label">优惠</text>
+        <text class="row-value accent">{{vm.best.discountText}}</text>
+      </view>
+      <view class="row" wx:if="{{vm.best.showExtraFees}}">
+        <text class="row-label">配送 + 打包</text>
+        <text class="row-value">{{vm.best.deliveryText}} + {{vm.best.packingText}}</text>
+      </view>
+      <view class="note" wx:if="{{vm.best.enjoyText}}">{{vm.best.enjoyText}}</view>
+      <view class="note" wx:if="{{vm.best.autoNote}}">自动配餐：{{vm.best.autoNote}}</view>
+
+      <button class="btn btn-primary btn-block" wx:if="{{canOrder}}" bindtap="onOrderTap" loading="{{ordering}}" disabled="{{ordering}}">
+        生成支付链接（{{vm.best.priceText}}）
+      </button>
+      <view class="muted small" wx:if="{{canOrder}}" style="margin-top:10rpx">
+        会创建一笔真实「未支付」订单，不会自动付款；付款要在麦当劳里完成。
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{order}}">
+      <view class="card-title"><text>订单已创建</text><text class="pill pill-green">未支付</text></view>
+      <view class="row" wx:if="{{order.orderId}}"><text class="row-label">订单号</text><text class="row-value">{{order.orderId}}</text></view>
+      <view class="row" wx:if="{{order.amountText}}"><text class="row-label">应付</text><text class="row-value strong">{{order.amountText}}</text></view>
+      <button class="btn btn-primary btn-block" wx:if="{{order.payUrl}}" bindtap="copyPayUrl">复制支付链接</button>
+      <view class="note" wx:if="{{order.payUrl}}">小程序不能直接打开外部支付页：复制链接后到手机浏览器打开即可付款。</view>
+      <view class="note note-error" wx:if="{{!order.payUrl}}">官方没有返回支付链接，请到麦当劳 App → 我的订单 里继续支付。</view>
+    </view>
+
+    <view class="card" wx:if="{{vm.comparisons.length > 1}}">
+      <view class="card-title"><text>同单跨门店比价</text><text class="sub">{{vm.comparisons.length}} 家</text></view>
+      <view class="list-item {{item.isBest ? 'best' : ''}}" wx:for="{{vm.comparisons}}" wx:key="key">
+        <view class="item-head">
+          <text class="item-name">{{item.storeName}}</text>
+          <text class="item-price {{item.isBest ? '' : 'plain'}}">{{item.priceText}}</text>
+        </view>
+        <view class="muted small">
+          <text wx:if="{{item.distanceText}}">{{item.distanceText}}｜</text>{{item.couponSavingText || '按官方算价'}}
+        </view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{vm.steps.length}}">
+      <view class="card-title"><text>手机上这样操作</text></view>
+      <view class="list-item" wx:for="{{vm.steps}}" wx:key="*this">
+        <view class="item-head">
+          <text class="item-name">{{index + 1}}. {{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{vm.addOns.length}}">
+      <view class="card-title"><text>券还能这样用</text><text class="sub">商品价，未含配送/打包</text></view>
+      <view class="list-item" wx:for="{{vm.addOns}}" wx:key="productName">
+        <view class="item-head">
+          <text class="item-name">{{item.productName}}</text>
+          <text class="item-price">{{item.couponPriceText}}</text>
+        </view>
+        <view class="muted small">{{item.listPriceText}} → 券后 {{item.couponPriceText}}｜{{item.couponTitle}}{{item.storeName ? '｜' + item.storeName : ''}}</view>
+      </view>
+    </view>
+
+    <view class="card" wx:if="{{vm.availableCoupons}}">
+      <view class="card-title">
+        <text>麦麦省还有可领券</text>
+        <text class="sub">{{vm.availableCoupons.count}} 张</text>
+      </view>
+      <view class="list-item" wx:for="{{vm.availableCoupons.titles}}" wx:key="*this">
+        <view class="item-head"><text class="item-name">{{item}}</text></view>
+      </view>
+      <view class="note">这些券要先在麦当劳里领取才会进门店券列表（领取会写入你的券包，本工具不代领）。</view>
+    </view>
+
+    <view class="card" wx:if="{{vm.closed.length}}">
+      <view class="card-title"><text>已排除（非营业时间）</text></view>
+      <view class="list-item" wx:for="{{vm.closed}}" wx:key="storeName">
+        <view class="item-head"><text class="item-name">{{item.storeName}}</text></view>
+        <view class="muted small">{{item.reason}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- ── 提示 ────────────────────────────────────── -->
+  <view class="card" wx:if="{{vm && vm.warnings.length}}">
+    <view class="card-title"><text>提示</text><text class="sub">{{vm.warnings.length}} 条</text></view>
+    <view class="warn-item" wx:for="{{vm.warnings}}" wx:key="*this">{{item}}</view>
+  </view>
+
+  <!-- ── 底部操作 ─────────────────────────────────── -->
+  <view class="btn-bar" wx:if="{{status === 'done'}}">
+    <button class="btn" bindtap="copyText">复制文案</button>
+    <button class="btn" bindtap="retry">重算</button>
+  </view>
+  <view class="btn-bar" wx:if="{{status === 'done'}}">
+    <button class="btn" bindtap="goHome">回首页</button>
+    <button class="btn" bindtap="goSettings">设置</button>
+  </view>
+
+  <view class="footer-hint" wx:if="{{status === 'done'}}">
+    金额全部来自麦当劳官方 calculate-price｜本工具只算钱、不下单
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

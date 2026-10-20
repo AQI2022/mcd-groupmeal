@@ -1,0 +1,153 @@
+<view class="container">
+
+  <!-- 顶部说明 -->
+  <view class="card hero-card">
+    <view class="hero-title">🍟 最省一单</view>
+    <view class="hero-sub">给「几个人 + 人均预算 + 送到哪」，把可配送团餐门店全跑一遍麦当劳官方算价，告诉你最省的那一单，以及为什么最省。</view>
+    <view class="tag-row">
+      <text class="pill pill-yellow">{{transportText}}</text>
+      <text class="pill {{demo ? 'pill-red' : 'pill-green'}}">{{demo ? '演示数据 · 不联网' : '真实 MCP'}}</text>
+      <text class="pill">{{quick ? '快速模式' : '完整模式'}}</text>
+    </view>
+    <view class="muted small" style="margin-top:14rpx">当前后端：{{endpointText}}</view>
+  </view>
+
+  <!-- 模式切换 -->
+  <view class="segment">
+    <view class="segment-item {{mode === 'group' ? 'active' : ''}}" data-mode="group" bindtap="onMode">团餐比价</view>
+    <view class="segment-item {{mode === 'phone' ? 'active' : ''}}" data-mode="phone" bindtap="onMode">手机点餐</view>
+  </view>
+
+  <!-- 团餐参数 -->
+  <view class="card" wx:if="{{mode === 'group'}}">
+    <view class="card-title">
+      <text>团餐参数</text>
+      <text class="sub">按「人均实付」排序</text>
+    </view>
+
+    <view class="field">
+      <view class="field-label"><text>人数</text><text class="hint">1–200</text></view>
+      <view class="stepper">
+        <view class="stepper-btn {{people <= 1 ? 'disabled' : ''}}" bindtap="decPeople">−</view>
+        <input class="stepper-input" type="number" value="{{people}}" bindinput="onPeopleInput" />
+        <view class="stepper-btn" bindtap="incPeople">+</view>
+      </view>
+    </view>
+
+    <view class="field">
+      <view class="field-label"><text>人均预算（元）</text><text class="hint">官方按人均分档</text></view>
+      <input class="input" type="digit" value="{{budget}}" bindinput="onBudgetInput" placeholder="例如 35" placeholder-class="input-placeholder" />
+    </view>
+
+    <view class="field">
+      <view class="field-label"><text>收货地址</text><text class="hint">决定能用哪些门店</text></view>
+
+      <picker wx:if="{{addressLabels.length > 0}}" mode="selector" range="{{addressLabels}}" value="{{addressIndex}}" bindchange="onAddressChange">
+        <view class="picker-box">
+          <text class="{{addressIndex >= 0 ? '' : 'placeholder'}}">{{addressIndex >= 0 ? addressLabels[addressIndex] : '从账号地址簿选一个'}}</text>
+          <text class="muted">▾</text>
+        </view>
+      </picker>
+
+      <view wx:elif="{{transport === 'http'}}" class="picker-box" bindtap="loadAddresses">
+        <text class="placeholder">{{addressError ? addressError : '点这里读取账号地址簿'}}</text>
+        <text class="muted">{{loadingAddresses ? '…' : '读取'}}</text>
+      </view>
+
+      <input class="input" style="margin-top:14rpx" value="{{addressQuery}}" bindinput="onAddressQueryInput" placeholder="或直接填地址关键词，例如 长安大厦" placeholder-class="input-placeholder" />
+      <view class="muted small" style="margin-top:10rpx">{{transport === 'cloud' ? '云函数模式：地址由关键词在账号地址簿里匹配' : '不选也不填时，服务端会使用地址簿第一条'}}</view>
+    </view>
+
+    <view class="field">
+      <view class="field-label"><text>偏好（可选）</text><text class="hint">想吃到的品类/商品</text></view>
+      <input class="input" value="{{prefer}}" bindinput="onPreferInput" placeholder="例如 牛肉、鸡块、饮" placeholder-class="input-placeholder" />
+    </view>
+  </view>
+
+  <!-- 手机点餐参数 -->
+  <view class="card" wx:if="{{mode === 'phone'}}">
+    <view class="card-title">
+      <text>手机点餐参数</text>
+      <text class="sub">同单跨门店比价</text>
+    </view>
+
+    <view class="segment" style="margin-bottom:22rpx">
+      <view class="segment-item {{channel === 'pickup' ? 'active' : ''}}" data-channel="pickup" bindtap="onChannel">到店自取</view>
+      <view class="segment-item {{channel === 'delivery' ? 'active' : ''}}" data-channel="delivery" bindtap="onChannel">麦乐送</view>
+    </view>
+
+    <block wx:if="{{channel === 'pickup'}}">
+      <view class="field">
+        <view class="field-label"><text>城市</text><text class="hint">必填</text></view>
+        <input class="input" value="{{city}}" bindinput="onCityInput" placeholder="例如 西安市" placeholder-class="input-placeholder" />
+      </view>
+      <view class="field">
+        <view class="field-label"><text>位置关键词</text><text class="hint">必填</text></view>
+        <input class="input" value="{{keyword}}" bindinput="onKeywordInput" placeholder="例如 长安大厦" placeholder-class="input-placeholder" />
+      </view>
+    </block>
+
+    <block wx:else>
+      <view class="field">
+        <view class="field-label"><text>收货地址</text><text class="hint">麦乐送必须有</text></view>
+        <picker wx:if="{{addressLabels.length > 0}}" mode="selector" range="{{addressLabels}}" value="{{addressIndex}}" bindchange="onAddressChange">
+          <view class="picker-box">
+            <text class="{{addressIndex >= 0 ? '' : 'placeholder'}}">{{addressIndex >= 0 ? addressLabels[addressIndex] : '从账号地址簿选一个'}}</text>
+            <text class="muted">▾</text>
+          </view>
+        </picker>
+        <view wx:elif="{{transport === 'http'}}" class="picker-box" bindtap="loadAddresses">
+          <text class="placeholder">{{addressError ? addressError : '点这里读取账号地址簿'}}</text>
+          <text class="muted">{{loadingAddresses ? '…' : '读取'}}</text>
+        </view>
+        <input class="input" style="margin-top:14rpx" value="{{addressQuery}}" bindinput="onAddressQueryInput" placeholder="或填地址关键词，例如 长安大厦" placeholder-class="input-placeholder" />
+      </view>
+    </block>
+
+    <view class="field">
+      <view class="field-label"><text>想吃什么</text><text class="hint">逗号分隔；留空=按预算自动配</text></view>
+      <input class="input" value="{{want}}" bindinput="onWantInput" placeholder="例如 巨无霸,中杯美式" placeholder-class="input-placeholder" />
+    </view>
+
+    <view class="field">
+      <view class="field-label"><text>预算（元，可选）</text><text class="hint">留空表示不限</text></view>
+      <input class="input" type="digit" value="{{budget}}" bindinput="onBudgetInput" placeholder="例如 40" placeholder-class="input-placeholder" />
+    </view>
+  </view>
+
+  <!-- 运行选项 -->
+  <view class="card card-tight">
+    <view class="row">
+      <view class="row-label">
+        快速模式
+        <view class="muted small">少算几家店 / 少验几个篮子，云函数 60 秒内能跑完</view>
+      </view>
+      <switch checked="{{quick}}" color="#DA291C" bindchange="onQuickChange" />
+    </view>
+    <view class="row">
+      <view class="row-label">
+        演示数据
+        <view class="muted small">不联网、不消耗 Token，用内置样本跑通全流程</view>
+      </view>
+      <switch checked="{{demo}}" color="#DA291C" bindchange="onDemoChange" />
+    </view>
+  </view>
+
+  <!-- 提交 -->
+  <view class="note note-error" wx:if="{{errorText}}">{{errorText}}</view>
+
+  <button class="btn btn-primary btn-block" bindtap="submit" disabled="{{submitting}}" loading="{{submitting}}">
+    {{mode === 'group' ? '算出最省的一单' : '算出该怎么点'}}
+  </button>
+
+  <view class="btn-bar" style="margin-top:20rpx">
+    <button class="btn" bindtap="goSettings">设置</button>
+    <button class="btn" open-type="share">分享</button>
+  </view>
+
+  <view class="footer-hint">
+    Token 只存在服务端或云函数里，不会进入小程序包；本工具只算钱、不下单，付款必须你本人在麦当劳 App 里确认。
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

@@ -1,0 +1,43 @@
+.hero-card {
+  background: linear-gradient(135deg, #DA291C 0%, #B31C11 100%);
+  color: #FFFFFF;
+  box-shadow: 0 10rpx 28rpx rgba(179, 28, 17, 0.28);
+}
+
+.hero-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  letter-spacing: 2rpx;
+  margin-bottom: 12rpx;
+}
+
+.hero-sub {
+  font-size: 26rpx;
+  line-height: 1.65;
+  color: #FFE9E4;
+  margin-bottom: 18rpx;
+}
+
+.hero-card .pill {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.hero-card .pill-yellow {
+  background: #FFC72C;
+  color: #4A3200;
+}
+
+.hero-card .pill-red {
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
+}
+
+.hero-card .muted {
+  color: #FFD9D2;
+}
+
+switch {
+  transform: scale(0.82);
+  transform-origin: right center;
+}

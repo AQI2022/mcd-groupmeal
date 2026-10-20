@@ -1,0 +1,8 @@
+{
+  "name": "mcd",
+  "version": "1.0.0",
+  "description": "mcd-groupmeal 云函数（小程序代理层）：只持有 MCP Token，不算业务逻辑",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {}
+}

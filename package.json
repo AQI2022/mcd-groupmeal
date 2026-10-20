@@ -1,7 +1,7 @@
 {
   "name": "mcd-groupmeal",
-  "version": "1.0.0",
-  "description": "麦当劳团餐满减优化引擎 + 手机点餐比价 · 给「人数 + 人均预算 + 配送地址」算最省的团餐单，也能给「想吃什么 + 位置」算出该去哪家店、用哪张券、实付多少（麦当劳中国 MCP）",
+  "version": "1.2.0",
+  "description": "麦当劳团餐满减优化引擎 + 手机点餐比价 · 给「人数 + 人均预算 + 配送地址」算最省的团餐单，也能给「想吃什么 + 位置」算出该去哪家店、用哪张券、实付多少；带手机网页端与微信小程序（含免域名免备案的云函数）（麦当劳中国 MCP）",
   "type": "module",
   "bin": {
     "mcd-groupmeal": "src/cli.mjs"
@@ -18,6 +18,9 @@
     "bin",
     "src",
     "public",
+    "miniprogram",
+    "cloudfunctions",
+    "project.config.json",
     "scripts",
     "tools",
     "docs",
@@ -38,7 +41,9 @@
     "phone": "node src/cli.mjs phone",
     "phone:demo": "node src/cli.mjs phone --demo --want 巨无霸,美式中杯",
     "test": "node --test test/",
-    "test:direct": "node test/core.test.mjs && node test/frontend.test.mjs && node test/server.test.mjs",
+    "test:direct": "node test/core.test.mjs && node test/frontend.test.mjs && node test/server.test.mjs && node test/miniprogram.test.mjs",
+    "mp:build": "node tools/build-mp-cloud.mjs",
+    "mp:check": "node tools/build-mp-cloud.mjs --check",
     "lifeline": "node tools/lifeline-probe.mjs",
     "city-scan": "node tools/city-scan.mjs"
   },
@@ -56,6 +61,10 @@
     "麦乐送",
     "优惠券",
     "optimizer",
+    "wechat",
+    "miniprogram",
+    "微信小程序",
+    "云函数",
     "zero-dependency"
   ],
   "license": "MIT"

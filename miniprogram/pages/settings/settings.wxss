@@ -1,0 +1,17 @@
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.note .mono,
+.mono {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 24rpx;
+}
+
+.list-item .item-name {
+  font-size: 28rpx;
+}
+
+.btn-sm {
+  margin-top: 6rpx;
+}

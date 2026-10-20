@@ -1,0 +1,88 @@
+<view class="container">
+
+  <view class="card">
+    <view class="card-title"><text>后端通道</text><text class="sub">Token 永远不进入小程序</text></view>
+    <view class="segment">
+      <view class="segment-item {{transport === 'http' ? 'active' : ''}}" data-mode="http" bindtap="onTransport">HTTP 服务</view>
+      <view class="segment-item {{transport === 'cloud' ? 'active' : ''}}" data-mode="cloud" bindtap="onTransport">云函数</view>
+    </view>
+
+    <block wx:if="{{transport === 'http'}}">
+      <view class="note">
+        HTTP 服务 = 你自己电脑/NAS/服务器上跑的 <text style="font-family: monospace">node src/server.mjs</text>。
+        开发者工具里填 <text style="font-family: monospace">http://127.0.0.1:8787</text>；真机预览要填电脑的局域网 IP（同一 Wi-Fi）。
+      </view>
+      <view class="field" style="margin-top:20rpx">
+        <view class="field-label"><text>服务器地址</text><text class="hint">不要带末尾斜杠</text></view>
+        <input class="input" value="{{serverUrl}}" bindinput="onServerUrl" placeholder="http://127.0.0.1:8787" placeholder-class="input-placeholder" />
+      </view>
+      <view class="field">
+        <view class="field-label"><text>访问码</text><text class="hint">服务启动时打印的 6 位</text></view>
+        <input class="input" value="{{accessKey}}" bindinput="onAccessKey" placeholder="例如 7KQ9ZM（每次启动都会变）" placeholder-class="input-placeholder" />
+      </view>
+      <button class="btn btn-sm" bindtap="copyCommand">复制启动命令</button>
+    </block>
+
+    <block wx:else>
+      <view class="note">
+        云函数 = 微信云开发的 <text style="font-family: monospace">cloudfunctions/mcd</text>。
+        不需要域名、不需要备案、不需要公网服务器；Token 放云函数的「环境变量」。开通云开发后右键该目录 → 上传并部署。
+      </view>
+      <view class="field" style="margin-top:20rpx">
+        <view class="field-label"><text>云开发环境 ID</text><text class="hint">云开发控制台 → 设置</text></view>
+        <input class="input" value="{{cloudEnv}}" bindinput="onCloudEnv" placeholder="例如 mcd-1a2b3c4d" placeholder-class="input-placeholder" />
+      </view>
+      <view class="field">
+        <view class="field-label"><text>云函数名</text><text class="hint">默认 mcd</text></view>
+        <input class="input" value="{{cloudFn}}" bindinput="onCloudFn" placeholder="mcd" placeholder-class="input-placeholder" />
+      </view>
+      <view class="field">
+        <view class="field-label"><text>调用口令（可选）</text><text class="hint">与云函数 MP_ACCESS_KEY 一致</text></view>
+        <input class="input" value="{{cloudKey}}" bindinput="onCloudKey" placeholder="留空表示云函数不校验" placeholder-class="input-placeholder" />
+      </view>
+    </block>
+
+    <view class="btn-bar" style="margin-top:24rpx">
+      <button class="btn btn-primary" bindtap="test" loading="{{testing}}" disabled="{{testing}}">测试连接</button>
+      <button class="btn" bindtap="save">保存</button>
+    </view>
+
+    <view class="note note-error" wx:if="{{testError}}">{{testError}}</view>
+    <view class="note" wx:if="{{testOk}}">
+      ✅ {{testTitle}}
+      <view wx:if="{{testDetail}}" class="small" style="margin-top:6rpx">{{testDetail}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>两种通道怎么选</text></view>
+    <view class="list-item">
+      <view class="item-head"><text class="item-name">只用开发者工具 / 自己手机预览</text><text class="pill pill-green">HTTP</text></view>
+      <view class="muted small">零成本。电脑开着服务就行；手机要和电脑同一个 Wi-Fi。</view>
+    </view>
+    <view class="list-item">
+      <view class="item-head"><text class="item-name">想脱离电脑、发给朋友用</text><text class="pill pill-yellow">云函数</text></view>
+      <view class="muted small">不用域名和备案，代价是每次算价最长 60 秒，建议开「快速模式」。</view>
+    </view>
+    <view class="list-item">
+      <view class="item-head"><text class="item-name">正式发布（所有人可用）</text><text class="pill pill-red">HTTPS</text></view>
+      <view class="muted small">需要已备案域名 + HTTPS 证书，并在小程序后台配置 request 合法域名。</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title"><text>关于</text></view>
+    <view class="row"><text class="row-label">后端</text><text class="row-value">mcd-groupmeal</text></view>
+    <view class="row"><text class="row-label">金额口径</text><text class="row-value">官方 calculate-price</text></view>
+    <view class="row" wx:if="{{platform}}"><text class="row-label">运行环境</text><text class="row-value">{{platform}}</text></view>
+  </view>
+
+  <view class="btn-bar">
+    <button class="btn" bindtap="reset">恢复默认</button>
+    <button class="btn btn-primary" bindtap="back">返回</button>
+  </view>
+
+  <view class="footer-hint">Token 只存在服务端进程或云函数环境变量里；已全仓扫描确认仓库内无真实 Token。</view>
+
+  <view class="safe-bottom"></view>
+</view>

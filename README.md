@@ -25,6 +25,7 @@
 > 📖 **不知道怎么开始？看 [`docs/USER-GUIDE.md`](./docs/USER-GUIDE.md)** —— 四种用法（零安装 / Windows 双击 / 命令行 / 当库引入）、完整参数表、输出逐列解读、前置条件与故障排查。
 > 📱 **在手机上点餐怎么用最省？看 [`docs/PHONE-GUIDE.md`](./docs/PHONE-GUIDE.md)** —— 到店自取 / 麦乐送、券找货、六个实测坑（打烊 `600057`、券商品不在菜单、券分渠道…）。
 > 📲 **想装在手机里用？看 [`docs/MOBILE-INSTALL.md`](./docs/MOBILE-INSTALL.md)** —— 手机浏览器界面（添加到主屏幕）、Android Termux 完全本地安装、连不上的排查清单。
+> 💚 **想做成微信小程序？看 [`docs/WECHAT-MINIPROGRAM.md`](./docs/WECHAT-MINIPROGRAM.md)** —— 完整小程序源码 + 云函数（免域名免备案），以及 9 个真实实测踩到的坑。
 
 ```bash
 node src/cli.mjs optimize --people 20 --budget 35 --address 西安   # 团餐
@@ -118,6 +119,27 @@ node src/server.mjs --demo --open   # 不联网、不需要 Token，先看界面
 两种装法（Android 用 Termux 可以完全脱离电脑）、连不上的排查清单、
 iOS/Android 分别怎么「添加到主屏幕」，见 **[`docs/MOBILE-INSTALL.md`](docs/MOBILE-INSTALL.md)**。
 
+### 想用微信小程序？→ `miniprogram/` + 云函数（`cloudfunctions/mcd`）
+
+```
+miniprogram/           小程序源码（首页 / 结果 / 设置，零第三方组件）
+cloudfunctions/mcd/    云开发云函数：免域名、免备案，Token 放环境变量
+project.config.json    开发者工具工程（miniprogramRoot + cloudfunctionRoot）
+```
+
+```bash
+node src/server.mjs                 # 通道 A：本机服务（开发者工具/真机预览连它）
+# 通道 B：开发者工具里右键 cloudfunctions/mcd → 上传并部署，控制台加 MCD_MCP_TOKEN、超时改 60s
+```
+
+导入方式：微信开发者工具 → 导入项目 → 目录选**仓库根目录** → 填自己的 AppID。
+手机端的两种通道、导入步骤、云函数环境变量、正式发布（HTTPS + 备案域名）要求、
+**9 个真实实测踩到的坑**，全在 **[`docs/WECHAT-MINIPROGRAM.md`](docs/WECHAT-MINIPROGRAM.md)**。
+
+实测（2026-10-18，真 Token，走的就是小程序自己的 `utils/api.js`）：手机点餐 3 家门店比价
+→ 实付 **¥38.80**、券省 ¥5.70、**3.9 秒**；团餐 20 人 → **¥512.20（人均 ¥25.61）**、7.8 秒；
+云函数通道（强制删掉全局 `fetch` 模拟 Node 16）同样的单 2.7 秒、返回值 6 KB。
+
 ---
 
 ## 快速开始
@@ -129,6 +151,7 @@ iOS/Android 分别怎么「添加到主屏幕」，见 **[`docs/MOBILE-INSTALL.m
 - **手机上用（推荐）**：双击 `bin\mcd-serve.cmd` —— 起一个网页服务，手机浏览器打开就能点；能「添加到主屏幕」。
 - **只想先看效果**：双击 `bin\mcd-demo.cmd`（内置演示数据，不联网、不需要 Token）；手机点餐用 `bin\mcd-phone.cmd --demo`，手机界面用 `bin\mcd-serve.cmd --demo`。
 - **本机自检**：双击 `bin\mcd-doctor.cmd`（Token / 握手 / 工具清单 / 地址簿，一次看清）。
+- **想做微信小程序**：`miniprogram/`（源码）+ `cloudfunctions/mcd`（云函数），导入步骤见 [`docs/WECHAT-MINIPROGRAM.md`](docs/WECHAT-MINIPROGRAM.md)；云函数那条路**免域名、免备案**。
 
 ### 0. 零配置试用（不需要 Token，不发任何网络请求）
 
@@ -275,8 +298,9 @@ bin/
   phone.mjs          手机点餐的友好入口（同上，手机点餐版）
 src/
   cli.mjs          CLI 入口（optimize / phone / stores / demo / doctor）
-  server.mjs       手机端服务：静态页面 + JSON API + 任务/SSE 进度 + 访问码鉴权
+  server.mjs       手机端服务：静态页面 + JSON API + 任务/SSE 进度 + 访问码鉴权（1.2.0 新增增量轮询）
   mcp-client.mjs   零依赖 Streamable HTTP JSON-RPC 客户端（会话、SSE、限流、退避）
+  http-fetch.mjs   `fetch` 兼容层（Node 16 云函数没有全局 fetch 时用它，零依赖）
   json.mjs         MCP 返回体「markdown + 内嵌 JSON」的平衡花括号解析器
   mcd.mjs          官方工具的领域封装 + 归一化（含业务错误码处置与降级、文字型工具）
   promotions.mjs   满折/满减规则解析 → 可判定谓词 + 折扣函数
@@ -286,8 +310,21 @@ src/
   optimizer.mjs    跨门店 × 助餐档 × 篮子 × 拆单 的求解与打分（团餐）
   phone.mjs        手机点餐求解：门店 × 券 × 清单 × 渠道 的实付比价（个人单）
   render.mjs       比价矩阵 / 结论 / 凑单提示的渲染
+  slim.mjs         结果裁剪：把完整结果压成界面用得到的字段（云函数 1MB 上限）
   mock.mjs         离线演示后端（**演示数据**，代码路径与线上一致）
   money.mjs        分/元换算与格式化
+miniprogram/        微信小程序（零第三方组件，CommonJS 写法，开发者工具直接编译）
+  app.json/app.js/app.wxss/sitemap.json
+  pages/index/      团餐比价 + 手机点餐两套参数表单（快速模式 / 演示数据开关）
+  pages/result/     实时日志 → 最省一单 / 跨门店比价 / 拆单结论 / 点餐卡 / 支付链接
+  pages/settings/   通道切换（HTTP 服务 / 云函数）、访问码、环境 ID、连通性检测
+  utils/api.js      两条通道的唯一网络层（wx.request 增量轮询 / wx.cloud.callFunction）
+  utils/view.js     「结果对象 → 页面视图模型」纯函数（可在 Node 里直接测）
+  utils/config.js   本地配置读写
+  utils/money.js    金额与折扣格式化
+cloudfunctions/mcd/ 微信云开发云函数（免域名免备案）：index.js + lib/ + config.json
+  lib/              由 `node tools/build-mp-cloud.mjs` 从 src/ 同步（有单测防漂移）
+project.config.json 微信开发者工具工程配置（miniprogramRoot + cloudfunctionRoot）
 public/              手机端界面（无构建步骤、无 CDN 依赖）
   index.html         三个标签页：点餐 / 团餐 / 我的
   app.js             表单、SSE 进度、下单二次确认（只负责 DOM / 事件 / 网络）
@@ -299,11 +336,13 @@ scripts/
 tools/
   lifeline-probe.mjs  A~E 生死线验证器
   city-scan.mjs       多城市门店与店间价差扫描器
+  build-mp-cloud.mjs  把引擎源码同步进云函数目录（`--check` 用于防漂移）
 test/core.test.mjs      36 个零依赖单元测试（规则解析 / 拆单枚举 / 手机点餐求解 / 无方案契约）
 test/frontend.test.mjs   9 个渲染层测试（把结果对象喂给界面代码，验证真的渲染出门店/券/实付）
 test/server.test.mjs    17 个手机端服务测试（访问码鉴权、路径穿越、SSE 端到端、前端一致性）
+test/miniprogram.test.mjs 23 个小程序测试（工程完整性 / 视图模型 / api.js 端到端 / 云函数 / fetch 兜底 / Token 泄露扫描）
 test/fixtures/          真实链路实测快照（渲染测试样本；到店链路无个人地址）
-docs/                   使用指南 + 手机点餐指南 + 手机安装指南 + 实测报告
+docs/                   使用指南 + 手机点餐指南 + 手机安装指南 + 微信小程序指南 + 实测报告
 ```
 
 ---
